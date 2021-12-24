@@ -1,18 +1,19 @@
-[==========] Running 3 tests from 1 test suite.
+[==========] Running 1 test from 1 test suite.
 [----------] Global test environment set-up.
-[----------] 3 tests from TestFixture
-[ RUN      ] TestFixture.DTOR
-: BASE CTOR
-: CLASS DTOR
-: CLASS DTOR
-: BASE DTOR
-[       OK ] TestFixture.DTOR (0 ms)
+[----------] 1 test from TestFixture
 [ RUN      ] TestFixture.CTOR
-[       OK ] TestFixture.CTOR (0 ms)
-[ RUN      ] TestFixture.ISFUNCT1
-[       OK ] TestFixture.ISFUNCT1 (0 ms)
-[----------] 3 tests from TestFixture (0 ms total)
+_gtests.cpp:45: Failure
+Value of: me::ISCTOR0<CLASS>
+  Actual: true
+Expected: false
+> DEFAULT CTOR EXIST
+[  FAILED  ] TestFixture.CTOR (0 ms)
+[----------] 1 test from TestFixture (0 ms total)
 
 [----------] Global test environment tear-down
-[==========] 3 tests from 1 test suite ran. (0 ms total)
-[  PASSED  ] 3 tests.
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] TestFixture.CTOR
+
+ 1 FAILED TEST

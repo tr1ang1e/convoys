@@ -13,6 +13,13 @@
 #include <utility>
 #include <concepts>
 
+#define ISMETHOD1(METHOD) =                                                   \
+  template <typename CLASS, typename ARG1, typename RET>                      \
+  concept IS ## METHOD ## 1 =                                                 \
+  requires( )                                                                 \
+  {                                                                           \
+    { CLASS(). ## METHOD ## (std::declval<ARG1>()) } -> std::same_as<RET>;    \
+  }                                                                      
 
 namespace ifmethodexists
 {
@@ -41,7 +48,6 @@ namespace ifmethodexists
   concept ISCTOR0 =    
   requires( )
   {
-    // CLASS* obj = new CLASS;
     CLASS();
   };
 
