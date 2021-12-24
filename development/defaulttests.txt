@@ -1,0 +1,10 @@
+CLASS
+
+CTOR = 
+  exists
+  if defalut ctor exists or deleted
+  does what we want
+  explicit / implicit casting
+
+DTOR =
+  virtual, if the class is inherited
