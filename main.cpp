@@ -1,4 +1,4 @@
-#include "headers/sixel.hpp"
+#include "src/Sixel.hpp"
 
 int main( )
 {
