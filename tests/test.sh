@@ -13,17 +13,36 @@ exename="_runtests"
 echo -e
 control=0
 
-# compile project
-if g++ $std -c _exls.cpp -o _exls.o
+# compile Count class
+if g++ $std -c _Count.cpp -o _Count.o
 then 
-  echo "+ project object file compilation succeed"
+  echo "+ class Count object file compilation succeed"
   let "control++"
 else
-  errormassage "project"
+  errormassage "class Count"
+fi
+
+# compile Print class
+if g++ $std -c _Print.cpp -o _Print.o
+then 
+  echo "+ class Print object file compilation succeed"
+  let "control++"
+else
+  errormassage "class Print"
+fi
+
+# create static project library
+if ar rc libproject.a _Count.o _Print.o
+then
+  echo "+ project static library creation succeed"
+  mv -f ./libproject.a ../src/
+  let "control++"
+else
+  errormassage "project static library"
 fi
 
 # compile gtests
-if g++ $std -c _gtests.cpp -o _gtests.o
+if g++ $std -c gtests.cpp -o _gtests.o
 then 
   echo "+ gtests object file compilation succeed"
   let "control++"
@@ -32,11 +51,11 @@ else
 fi
 
 # if both project and gtests are compiled then build tests
-if [[ $control -eq 2 ]]
+if [[ $control -eq 4 ]]
 then
 
   # if linking succeed
-  if g++ _gtests.o _exls.o $gtestlibs -o $exename
+  if g++ _gtests.o $gtestlibs -L../src/ -lproject -o $exename
   then
 
     echo "+ test building succeed"
@@ -56,6 +75,13 @@ then
       awk "/.*${tostdout}.*/,/^$/" "$logfile"
     fi
   
+    # clean directory
+    echo -e
+    if rm _gtests.o _Print.o _Count.o
+    then echo "+ directory cleaned"
+    else echo "- directory not cleaned"
+    fi
+
   else errormassage "linking stage of"
   fi
 
