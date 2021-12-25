@@ -8,6 +8,7 @@ errormassage()
 #compiler options
 std="-std=c++20"
 gtestlibs="-lgtest -lgtest_main -lpthread"
+lib="../lib/"
 exename="_runtests"
 
 echo -e
@@ -35,7 +36,7 @@ fi
 if ar rc libproject.a _Count.o _Print.o
 then
   echo "+ project static library creation succeed"
-  mv -f ./libproject.a ../src/
+  mv -f ./libproject.a "$lib"
   let "control++"
 else
   errormassage "project static library"
@@ -55,7 +56,7 @@ if [[ $control -eq 4 ]]
 then
 
   # if linking succeed
-  if g++ _gtests.o $gtestlibs -L../src/ -lproject -o $exename
+  if g++ _gtests.o $gtestlibs -L"$lib" -lproject -o $exename
   then
 
     echo "+ test building succeed"
