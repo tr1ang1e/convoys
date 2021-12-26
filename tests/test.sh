@@ -5,6 +5,20 @@ errormassage()
   echo "- $1 compilation failed"
 }
 
+# default options
+output=0
+
+# arguments processing
+if [[ -n $1 ]] 
+then
+  if [ $1 == "-term" ]
+  then let output=1
+  else
+    echo "- wrong option"
+    exit 1
+  fi
+fi
+
 #compiler options
 std="-std=c++20"
 gtestlibs="-lgtest -lgtest_main -lpthread"
@@ -64,7 +78,11 @@ then
 
     # prepare logfile ang execute test
     logfile="./_testlog.txt"
-    result=`./$exename &> "$logfile"` 
+    if [[ $output -eq 1 ]]
+    then ./$exename                  # file output
+    else ./$exename &> "$logfile"    # std  output
+    fi
+    result=$?    # $? contains the last command return code
 
     # if test succeed ( RUN_ALL_TESTS() returned 0 value )
     if [[ $result -ne 0 ]]

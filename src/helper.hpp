@@ -10,8 +10,45 @@
 #pragma once
 
 // required headers
+#include <iostream>
 #include <concepts>
 #include <utility>
+#include <vector>
+#include <thread>
+
+namespace functions
+{
+  // processing delay
+  void delayprocess(const unsigned int& millisec)
+  {
+    std::this_thread::sleep_for(std::chrono::milliseconds(millisec));
+  }
+  
+  // ECS sequence = *ESC*c 
+  void resetterminal()
+  {
+    const char ESC = 0x1B;
+    const char CLEAN = 0x63; 
+    std::cout << ESC << CLEAN;
+  }
+  
+  // print epoch to terminal
+  void printepoch(const std::vector<char>& field, const int& width)
+  {
+    resetterminal();  // clean terminal and back cursor to the 0x0 position
+    
+    // print epoch
+    int i = 0;
+    for (const auto& el : field)
+    {
+      if (i % width) std::cout << el;
+      else std::cout << el << std::endl;
+      ++i;
+    }
+  }
+}
+
+
 
 // clang-format off
 
@@ -83,4 +120,5 @@ ISMETHOD1 (FUNCT, funct);
 }
 
 // short namespace aliases
+namespace fu = functions;
 namespace me = ifmethodexists;
