@@ -83,6 +83,15 @@ printepoch (const std::vector<char>& field, const int& width)
     CLASS(std::declval<ARG1>(), std::declval<ARG2>());                      \
   }; 
 
+// method with 0 input arguments
+#define ISMETHOD0(METHOD, method)                                           \
+  template <typename CLASS, typename RET>                                   \
+  concept IS ## METHOD ## 0 =                                               \
+  requires( )                                                               \
+  {                                                                         \
+    { std::declval<CLASS>().method() } -> std::same_as<RET>;                \
+  };
+
 // method with 1 input argument
 #define ISMETHOD1(METHOD, method)                                                         \
   template <typename CLASS, typename ARG1, typename RET>                                  \
@@ -118,7 +127,9 @@ ISCTOR0 ();
 ISCTOR1 ();
 ISCTOR2 ();
 
-ISMETHOD1 (FUNCT, funct);
+ISMETHOD0 (GETALIVECELLSNUMBER, GetAliveCellsNumber);
+ISMETHOD0 (GETGRIDSIZE, GetGridSize);
+
 ISMETHOD1 (SETSTARTPICTURE, SetStartPicture);
 
 }

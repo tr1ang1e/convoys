@@ -6,7 +6,7 @@ errormassage()
 }
 
 # default options
-output=0
+output=0              # 0 = to file ; 1 = to terminal
 
 # arguments processing
 if [[ -n $1 ]] 
@@ -74,7 +74,7 @@ then
   then
 
     echo "+ test building succeed"
-    echo "+ running test "
+    echo "+ running tests "
 
     # prepare logfile ang execute test
     logfile="./_testlog.txt"
@@ -88,10 +88,13 @@ then
     if [[ $result -ne 0 ]]
     then echo "- gtests crashed"
     else  # print final test state
-      echo "+ gtests succeed (> $logfile)"
-      echo -e
-      tostdout="Global test environment tear-down"
-      awk "/.*${tostdout}.*/,/^$/" "$logfile"
+      if [[ $output -eq 0 ]]
+      then
+        echo "+ gtests succeed (> $logfile)"
+        echo -e
+        tostdout="Global test environment tear-down"
+        awk "/.*${tostdout}.*/,/^$/" "$logfile"
+      fi
     fi
   
     # clean directory

@@ -7,10 +7,17 @@
  *  - directories    project structure                  1.02.00
  *  - printepoch()   print function for testing         1.03.00
  *  - GridClass      ctors                              2.01.00
+ *  - GridClass      ctors                              2.02.00
+ *
+ *  Error codes
+ *  01 = exists but forbidden
+ *  02 = doesn't exist but necessary
  *
  */
 
 #include <gtest/gtest.h>
+
+#include <cstdint>
 #include <iostream>
 #include <vector>
 
@@ -38,10 +45,33 @@ protected:
 
 TEST_F (TestGridClass, CTORs)
 {
-  EXPECT_FALSE (me::ISCTOR0<GridClass>);
-  EXPECT_TRUE ((me::ISCTOR1<GridClass, int>));
+  EXPECT_FALSE (me::ISCTOR0<GridClass>) << "> 01_error : GridClass()";
+  EXPECT_TRUE ((me::ISCTOR1<GridClass, uint16_t>))
+      << "> 02_error : GridClass(int)";
 
-  // check if grid.size() is correct
+  GridClass Grid1 (0);
+  EXPECT_EQ (Grid1.GetGridSize (), 0);
+  EXPECT_EQ (Grid1.GetAliveCellsNumber (), 0);
+
+  GridClass Grid2 (4);
+  EXPECT_EQ (Grid2.GetGridSize (), 16);
+  EXPECT_EQ (Grid2.GetAliveCellsNumber (), 0);
+
+  GridClass Grid3 (16);
+  EXPECT_EQ (Grid3.GetGridSize (), 256);
+  EXPECT_EQ (Grid3.GetAliveCellsNumber (), 0);
+}
+
+TEST_F (TestGridClass, GetGridSize)
+{
+  EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>))
+      << "> 02_error : uint32_t GridClass::GetGridSize()";
+}
+
+TEST_F (TestGridClass, GetAliveSellsNumber)
+{
+  EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>))
+      << "> 02_error : uint32_t GridClass::GetAliveSellsNumber()";
 }
 
 TEST_F (TestGridClass, SetStartPicture)
