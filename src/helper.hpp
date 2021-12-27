@@ -81,15 +81,16 @@ namespace functions
   }; 
 
 // method with 1 input argument
-#define ISMETHOD1(METHOD, method)                                           \
-  template <typename CLASS, typename ARG1, typename RET>                    \
-  concept IS ## METHOD ## 1 =                                               \
-  requires( )                                                               \
-  {                                                                         \
-    { CLASS().method(std::declval<ARG1>()) } -> std::same_as<RET>;          \
+#define ISMETHOD1(METHOD, method)                                                         \
+  template <typename CLASS, typename ARG1, typename RET>                                  \
+  concept IS ## METHOD ## 1 =                                                             \
+  requires( )                                                                             \
+  {                                                                                       \
+    { std::declval<CLASS>().method(std::declval<ARG1>()) } -> std::same_as<RET>;          \
   };
 
 // clang-format on
+
 
 namespace ifmethodexists
 {
@@ -116,6 +117,7 @@ ISCTOR1 ();
 ISCTOR2 ();
 
 ISMETHOD1 (FUNCT, funct);
+ISMETHOD1 (SETSTARTPICTURE, SetStartPicture);
 
 }
 

@@ -28,13 +28,13 @@ exename="_runtests"
 echo -e
 control=0
 
-# compile Count class
-if g++ $std -c _Count.cpp -o _Count.o
+# compile GreedClass class
+if g++ $std -c _GreedClass.cpp -o _GreedClass.o
 then 
-  echo "+ class Count object file compilation succeed"
+  echo "+ class GreedClass object file compilation succeed"
   let "control++"
 else
-  errormassage "class Count"
+  errormassage "class GreedClass"
 fi
 
 # compile Print class
@@ -47,7 +47,7 @@ else
 fi
 
 # create static project library
-if ar rc libproject.a _Count.o _Print.o
+if ar rc libproject.a _GreedClass.o _Print.o
 then
   echo "+ project static library creation succeed"
   mv -f ./libproject.a "$lib"
@@ -96,7 +96,7 @@ then
   
     # clean directory
     echo -e
-    if rm _gtests.o _Print.o _Count.o
+    if rm _gtests.o _Print.o _GreedClass.o
     then echo "+ directory cleaned"
     else echo "- directory not cleaned"
     fi

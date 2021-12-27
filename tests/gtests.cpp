@@ -6,6 +6,7 @@
  *  - class COUNT    default ctor doesn't exist         1.01.00
  *  - directories    project structure                  1.02.00
  *  - printepoch()   print function for testing         1.03.00
+ *  - GridClass      ctors                              2.01.00
  *
  */
 
@@ -13,15 +14,14 @@
 #include <vector>
 #include <iostream>
 
-
-#include "../src/Count.hpp"
+#include "../src/GreedClass.hpp"
 #include "../src/Print.hpp"
 #include "../src/helper.hpp"
 
-class TestFixture : public ::testing::Test
+class TestGridClass : public ::testing::Test
 {
 protected:
-  TestFixture () {}
+  TestGridClass () {}
 
   void
   SetUp () override
@@ -33,26 +33,41 @@ protected:
   {
   }
 
-  ~TestFixture () {}
+  ~TestGridClass () {}
 };
 
-TEST_F (TestFixture, Test) {}
-
-TEST (TestPrintepoch, FirstTest)
+TEST_F (TestGridClass, CTORs) 
 {
-  std::vector<char> epoch(625, 'x');
-  for (int i = 0; i < 625; ++i)
-  {
-    fu::printepoch(epoch, 25);
-    epoch[i] = 0;
-    fu::delayprocess(35);
-    fu::resetterminal();
-  }
+  EXPECT_FALSE(me::ISCTOR0<GridClass>);
+  EXPECT_TRUE((me::ISCTOR1<GridClass, int>));
+
+  // check if grid.size() is correct
+}
+
+TEST_F (TestGridClass, SetStartPicture)
+{
+  EXPECT_TRUE((me::ISSETSTARTPICTURE1<GridClass, std::vector<int>, void>));
+  
 }
 
 int
 main (int argc, char* argv[])
 {
+
+  bool b = false;
+
+  if (b)
+  {
+    std::vector<char> epoch(625, 'x');
+    for (int i = 0; i < 625; ++i)
+    {
+      fu::printepoch(epoch, 25);
+      epoch[i] = 0;
+      fu::delayprocess(35);
+      fu::resetterminal();
+    }
+  }
+
   ::testing::InitGoogleTest (&argc, argv);
   return RUN_ALL_TESTS ();
 }
