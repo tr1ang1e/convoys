@@ -7,11 +7,13 @@ class GridClass
 {
   using Grid = std::vector<char>;
   Grid grid;
+  Grid temp;
 
   using Side = uint16_t;
   Side x;
   Side y;
 
+  uint16_t epochnum = 0;
   char cellchar = 'x';
 
 public:
@@ -23,4 +25,6 @@ public:
   uint32_t GetGridSize () const;
   uint32_t GetAliveCellsNumber () const;
   Grid GetCurrentEpoch () const;
+  uint16_t GetEpochNum () const;
+  void CountNextEpoch ();
 };

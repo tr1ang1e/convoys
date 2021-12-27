@@ -6,13 +6,14 @@
  *  - gtests         add existance checking possibility     1.01.00
  *  - project        project structure                      1.02.00
  *  - gtests         print function for testing             1.03.00
- *  - GridClass      ctors                                  2.01.00
+ *  - GridClass      GridClass ctors                        2.01.00
  *  - GridClass      ctors                                  2.02.00
  *  - gtests         error massages shorter                 2.02.01
  *  - gtests         split gtests helper header             2.02.02
  *  - gtests         add constancy checking possibility     2.02.03
  *  - GridClass      SetStartEpoch                          2.03.00
  *  - gtests         TestGridClass using                    2.03.01
+ *  - gtests         GridClass::CountNextEpoch              2.04.00
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -69,6 +70,7 @@ TEST_F (TestGridClass, GetInfoAboutGrid)
   EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>)) << "> 02_error";
   EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>)) << "> 02_error";
   EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<char>>)) << "> 02_error";
+  EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint16_t>)) << "> 02_error";
 }
 
 TEST_F (TestGridClass, IsInfoMethodConst)
@@ -76,6 +78,7 @@ TEST_F (TestGridClass, IsInfoMethodConst)
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize))) << "> 05_error";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber))) << "> 05_error";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch))) << "> 05_error";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum))) << "> 05_error";
 }
 
 TEST_F (TestGridClass, CTORs)
@@ -106,17 +109,69 @@ TEST_F (TestGridClass, CTORs)
 
 TEST_F (TestGridClass, SetStartEpoch)
 {
-  EXPECT_TRUE ((me::ISSETSTARTEPOCH1<GridClass, std::vector<uint16_t>, void>))
+  ASSERT_TRUE ((me::ISSETSTARTEPOCH1<GridClass, std::vector<uint16_t>, void>))
       << "> 02_error";
 
-  EXPECT_EQ (permanent.GetAliveCellsNumber (), 13) << "> 03_error";
+  EXPECT_EQ (permanent.GetAliveCellsNumber (), startEpoch1.size ()) << "> 03_error";
   EXPECT_TRUE (fu::comparecellspositions (startEpoch1, permanent)) << "> 04_error";
 
-  EXPECT_EQ (loop.GetAliveCellsNumber (), 14) << "> 03_error";
+  EXPECT_EQ (loop.GetAliveCellsNumber (), startEpoch2.size ()) << "> 03_error";
   EXPECT_TRUE (fu::comparecellspositions (startEpoch2, loop)) << "> 04_error";
 
-  EXPECT_EQ (motion.GetAliveCellsNumber (), 5) << "> 03_error";
+  EXPECT_EQ (motion.GetAliveCellsNumber (), startEpoch3.size ()) << "> 03_error";
   EXPECT_TRUE (fu::comparecellspositions (startEpoch3, motion)) << "> 04_error";
+}
+
+TEST_F (TestGridClass, CountNextEpoch)
+{
+  ASSERT_TRUE ((me::ISCOUNTNEXTEPOCH0<GridClass, void>)) << "> 02_error";
+
+  // check permanent grid
+  int epochs_to_check1 = 4;
+  std::vector<std::vector<uint16_t>> permanent_epochs (epochs_to_check1, startEpoch1);
+  for (int i = 1; i < epochs_to_check1; ++i)
+    {
+      permanent.CountNextEpoch ();
+      EXPECT_EQ (permanent.GetAliveCellsNumber (), permanent_epochs[i].size ());
+      EXPECT_TRUE (fu::comparecellspositions (permanent_epochs[i], permanent));
+    }
+
+  // check loop grid
+  int epochs_to_check2 = 9;
+  std::vector<std::vector<uint16_t>> loop_epochs (epochs_to_check2, startEpoch2);
+  // clang-format off
+  loop_epochs[1] = { 74,  89,  90,  91, 104, 106, 107, 108, 119, 123, 134, 138, 149, 150, 151, 153, 166, 167, 168, 183 };
+  loop_epochs[2] = { 73,  74,  75,  92, 104, 108, 119, 121, 124, 133, 136, 138, 149, 153, 165, 182, 183, 184 };
+  loop_epochs[3] = { 58,  74,  75,  89, 90,  92,  104, 107, 108, 109, 119, 121, 123, 134, 136, 138, 148, 149, 150, 153, 165, 167, 168, 182, 183 };
+  loop_epochs[4] = { 58,  59,  89,  93, 104, 109, 119, 121, 123, 134, 136, 138, 148, 153, 164, 168, 198, 199 };
+  loop_epochs[5] = { 74, 104, 105, 106, 108, 119, 121, 122, 135, 136, 138, 149, 151, 152, 153, 183 };
+  loop_epochs[6] = { 90,  91, 104, 106, 107, 119, 138, 150, 151, 153, 166, 167 };
+  loop_epochs[7] = { 89,  90,  91, 105, 106, 107, 121, 122, 123, 134, 135, 136, 150, 151, 152, 166, 167, 168 };
+  // clang-format on
+  for (int i = 1; i < epochs_to_check2; ++i)
+    {
+      loop.CountNextEpoch ();
+      EXPECT_EQ (loop.GetAliveCellsNumber (), loop_epochs[i].size ());
+      EXPECT_TRUE (fu::comparecellspositions (loop_epochs[i], loop));
+    }
+
+  // check motion grid
+  int epochs_to_check3 = 9;
+  std::vector<std::vector<uint16_t>> motion_epochs (epochs_to_check3, startEpoch3);
+  motion_epochs[1] = { 45, 60, 76, 77, 78 };
+  motion_epochs[2] = { 60, 62, 76, 77, 93 };
+  motion_epochs[3] = { 60, 76, 78, 92, 93 };
+  motion_epochs[4] = { 61, 75, 76, 92, 93 };
+  motion_epochs[5] = { 60, 75, 91, 92, 93 };
+  motion_epochs[6] = { 75, 77, 91, 92, 108 };
+  motion_epochs[7] = { 75, 91, 93, 107, 108 };
+  motion_epochs[8] = { 76, 90, 91, 107, 108 };
+  for (int i = 1; i < epochs_to_check3; ++i)
+    {
+      motion.CountNextEpoch ();
+      EXPECT_EQ (motion.GetAliveCellsNumber (), motion_epochs[i].size ());
+      EXPECT_TRUE (fu::comparecellspositions (motion_epochs[i], motion));
+    }
 }
 
 int

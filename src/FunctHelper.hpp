@@ -60,10 +60,11 @@ printepoch (const std::vector<char>& field, const int& width)
 
 // compare manual entered cells positions with actual alive cells positions
 bool
-comparecellspositions (const std::vector<uint16_t>& manual, const GridClass& grid)
+comparecellspositions (std::vector<uint16_t>& manual, const GridClass& grid)
 {
   bool same = true;
 
+  std::sort (manual.begin (), manual.end ());
   uint32_t gridsize = grid.GetGridSize ();
   std::vector<char> currentepoch = grid.GetCurrentEpoch ();
 
