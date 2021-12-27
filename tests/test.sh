@@ -86,7 +86,7 @@ then
 
     # if test succeed ( RUN_ALL_TESTS() returned 0 value )
     if [[ $result -ne 0 ]]
-    then echo "- gtests crashed"
+    then echo "- gtests filed"
     else  # print final test state
       if [[ $output -eq 0 ]]
       then

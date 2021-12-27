@@ -2,8 +2,25 @@
  * Helper .hpp to implement additional entities
  *
  *  Namespaces
- *  [me] ifmethodexists = checking name + arg types + return value type
+ *  [me] ifmethodexists = checking: name, arg types, return value type, is const
+ *       actual list:
+ *       ISCTOR0, ISCTOR1, ISCTOR2
+ *       ISMETHOD0, ISMETHOD1
+ *       ISMETHODCONST
  *
+ *  Made using concepts
+ *  Concept name >> ISNAME1
+ *    IS = prefix
+ *    NAME = method name
+ *    1 = number of methos arguments
+ *
+ *  Template parameters
+ *    CLASS = class for method existing checking
+ *    ARGN  = types of adrguments ( N = 1, 2, ... )
+ *    RET   = return value type
+ *
+ *  Usage. Concept converts to bool:
+ *  bool b = ISNAME1<MyClass, int, int>
  *
  */
 
@@ -11,47 +28,7 @@
 
 // required headers
 #include <concepts>
-#include <iostream>
-#include <thread>
 #include <utility>
-#include <vector>
-
-namespace functions
-{
-// processing delay
-void
-delayprocess (const unsigned int& millisec)
-{
-  std::this_thread::sleep_for (std::chrono::milliseconds (millisec));
-}
-
-// ECS sequence = *ESC*c
-void
-resetterminal ()
-{
-  const char ESC = 0x1B;
-  const char CLEAN = 0x63;
-  std::cout << ESC << CLEAN;
-}
-
-// print epoch to terminal
-void
-printepoch (const std::vector<char>& field, const int& width)
-{
-  resetterminal (); // clean terminal and back cursor to the 0x0 position
-
-  // print epoch
-  int i = 0;
-  for (const auto& el : field)
-    {
-      if (i % width)
-        std::cout << el;
-      else
-        std::cout << el << std::endl;
-      ++i;
-    }
-}
-}
 
 // clang-format off
 
@@ -101,27 +78,12 @@ printepoch (const std::vector<char>& field, const int& width)
     { std::declval<CLASS>().method(std::declval<ARG1>()) } -> std::same_as<RET>;          \
   };
 
-// clang-format on
+
+#define ISMETHODCONST(CLASS, METHOD)  \
+me::ISMETHODCONST<CLASS, decltype(&CLASS::METHOD)>
 
 namespace ifmethodexists
 {
-
-/**
- * Made using concepts
- * Concept name >> ISNAME1
- *    IS = prefix
- *    NAME = method name
- *    1 = number of methos arguments
- *
- * Template parameters
- *    CLASS = class for method existing checking
- *    ARGN  = types of adrguments ( N = 1, 2, ... )
- *    RET   = return value type
- *
- * Usage. Concept converts to bool:
- * bool b = ISNAME1<MyClass, int, int>
- *
- */
 
 ISCTOR0 ();
 ISCTOR1 ();
@@ -129,11 +91,20 @@ ISCTOR2 ();
 
 ISMETHOD0 (GETALIVECELLSNUMBER, GetAliveCellsNumber);
 ISMETHOD0 (GETGRIDSIZE, GetGridSize);
+ISMETHOD0 (GETCURRENTEPOCH, GetCurrentEpoch);
 
-ISMETHOD1 (SETSTARTPICTURE, SetStartPicture);
+ISMETHOD1 (SETSTARTEPOCH, SetStartEpoch);
+
+template <typename CLASS, typename METHOD, typename ... ARGS>
+concept ISMETHODCONST =
+requires(METHOD method, ARGS ... args)
+{
+  (std::declval<CLASS const>().*method)(args ...);
+};
 
 }
 
 // short namespace aliases
-namespace fu = functions;
 namespace me = ifmethodexists;
+
+// clang-format on
