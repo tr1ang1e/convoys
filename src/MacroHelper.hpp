@@ -82,6 +82,8 @@
 #define ISMETHODCONST(CLASS, METHOD)  \
 me::ISMETHODCONST<CLASS, decltype(&CLASS::METHOD)>
 
+
+// macro
 namespace ifmethodexists
 {
 
@@ -94,6 +96,12 @@ ISMETHOD0 (GETGRIDSIZE, GetGridSize);
 ISMETHOD0 (GETCURRENTEPOCH, GetCurrentEpoch);
 
 ISMETHOD1 (SETSTARTEPOCH, SetStartEpoch);
+
+}
+
+// as is
+namespace ifmethodexists
+{
 
 template <typename CLASS, typename METHOD, typename ... ARGS>
 concept ISMETHODCONST =

@@ -97,8 +97,8 @@ TEST_F (TestGridClass, GetCurrentEpoch)
 
 TEST_F (TestGridClass, IsMethodConst)
 {
-  EXPECT_TRUE((ISMETHODCONST(GridClass, GetGridSize))) << "> 05_error";
-  EXPECT_TRUE((ISMETHODCONST(GridClass, GetAliveCellsNumber))) << "> 05_error";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize))) << "> 05_error";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber))) << "> 05_error";
 }
 
 int
