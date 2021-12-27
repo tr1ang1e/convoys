@@ -107,22 +107,23 @@ TEST_F (TestGridClass, CTORs)
   GridClass grid4 (240, 160);
   EXPECT_EQ (grid4.GetGridSize (), 38400)         << "> 03";
   EXPECT_EQ (grid4.GetAliveCellsNumber (), 0)     << "> 03";
-  // clang-format on
 }
 
 TEST_F (TestGridClass, SetStartEpoch)
 {
   ASSERT_TRUE ((me::ISSETSTARTEPOCH1<GridClass, std::vector<uint16_t>, void>)) << "> 02";
 
-  EXPECT_EQ (permanent.GetAliveCellsNumber (), startEpoch1.size ()) << "> 03";
-  EXPECT_TRUE (fu::comparecellspositions (startEpoch1, permanent)) << "> 04";
+  EXPECT_EQ (permanent.GetAliveCellsNumber (), startEpoch1.size ())   << "> 03";
+  EXPECT_TRUE (fu::comparecellspositions (startEpoch1, permanent))    << "> 04";
 
-  EXPECT_EQ (loop.GetAliveCellsNumber (), startEpoch2.size ()) << "> 03";
-  EXPECT_TRUE (fu::comparecellspositions (startEpoch2, loop)) << "> 04";
+  EXPECT_EQ (loop.GetAliveCellsNumber (), startEpoch2.size ())        << "> 03";
+  EXPECT_TRUE (fu::comparecellspositions (startEpoch2, loop))         << "> 04";
 
-  EXPECT_EQ (motion.GetAliveCellsNumber (), startEpoch3.size ()) << "> 03";
-  EXPECT_TRUE (fu::comparecellspositions (startEpoch3, motion)) << "> 04";
+  EXPECT_EQ (motion.GetAliveCellsNumber (), startEpoch3.size ())      << "> 03";
+  EXPECT_TRUE (fu::comparecellspositions (startEpoch3, motion))       << "> 04";
 }
+
+// clang-format on
 
 TEST_F (TestGridClass, CountNextEpoch)
 {
