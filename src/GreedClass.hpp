@@ -5,11 +5,9 @@ class GridClass
   using Grid = std::vector<char>;
   Grid grid;
 
-  public:
-
+public:
   GridClass () = delete;
   GridClass (const int& side);
-  
-  void SetStartPicture(const std::vector<int>& alivecells);
 
+  void SetStartPicture (const std::vector<int>& alivecells);
 };

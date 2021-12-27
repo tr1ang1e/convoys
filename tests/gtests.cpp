@@ -11,8 +11,8 @@
  */
 
 #include <gtest/gtest.h>
-#include <vector>
 #include <iostream>
+#include <vector>
 
 #include "../src/GreedClass.hpp"
 #include "../src/Print.hpp"
@@ -36,18 +36,17 @@ protected:
   ~TestGridClass () {}
 };
 
-TEST_F (TestGridClass, CTORs) 
+TEST_F (TestGridClass, CTORs)
 {
-  EXPECT_FALSE(me::ISCTOR0<GridClass>);
-  EXPECT_TRUE((me::ISCTOR1<GridClass, int>));
+  EXPECT_FALSE (me::ISCTOR0<GridClass>);
+  EXPECT_TRUE ((me::ISCTOR1<GridClass, int>));
 
   // check if grid.size() is correct
 }
 
 TEST_F (TestGridClass, SetStartPicture)
 {
-  EXPECT_TRUE((me::ISSETSTARTPICTURE1<GridClass, std::vector<int>, void>));
-  
+  EXPECT_TRUE ((me::ISSETSTARTPICTURE1<GridClass, std::vector<int>, void>));
 }
 
 int
@@ -57,16 +56,16 @@ main (int argc, char* argv[])
   bool b = false;
 
   if (b)
-  {
-    std::vector<char> epoch(625, 'x');
-    for (int i = 0; i < 625; ++i)
     {
-      fu::printepoch(epoch, 25);
-      epoch[i] = 0;
-      fu::delayprocess(35);
-      fu::resetterminal();
+      std::vector<char> epoch (625, 'x');
+      for (int i = 0; i < 625; ++i)
+        {
+          fu::printepoch (epoch, 25);
+          epoch[i] = 0;
+          fu::delayprocess (35);
+          fu::resetterminal ();
+        }
     }
-  }
 
   ::testing::InitGoogleTest (&argc, argv);
   return RUN_ALL_TESTS ();
