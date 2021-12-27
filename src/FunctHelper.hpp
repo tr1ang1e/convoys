@@ -58,7 +58,7 @@ printepoch (const std::vector<char>& field, const int& width)
     }
 }
 
-// compare manual alive cells positions with actual alive cells positions
+// compare manual entered cells positions with actual alive cells positions
 bool
 comparecellspositions (const std::vector<uint16_t>& manual, const GridClass& grid)
 {
