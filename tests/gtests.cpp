@@ -14,6 +14,7 @@
  *  - GridClass      SetStartEpoch                          2.03.00
  *  - gtests         TestGridClass using                    2.03.01
  *  - gtests         GridClass::CountNextEpoch              2.04.00
+ *  - gtests         error massage shorter                  2.04.01
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -65,66 +66,67 @@ protected:
   }
 };
 
+// clang-format off
 TEST_F (TestGridClass, GetInfoAboutGrid)
 {
-  EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>)) << "> 02_error";
-  EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>)) << "> 02_error";
-  EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<char>>)) << "> 02_error";
-  EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint16_t>)) << "> 02_error";
+  EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>))               << "> 02";
+  EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>))       << "> 02";
+  EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<char>>))  << "> 02";
+  EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint16_t>))               << "> 02";
 }
 
 TEST_F (TestGridClass, IsInfoMethodConst)
 {
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize))) << "> 05_error";
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber))) << "> 05_error";
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch))) << "> 05_error";
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum))) << "> 05_error";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize)))                << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber)))        << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch)))            << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum)))                << "> 05";
 }
 
 TEST_F (TestGridClass, CTORs)
 {
 
   // ctors existance
-  EXPECT_FALSE (me::ISCTOR0<GridClass>) << "> 01_error";
-  ASSERT_TRUE ((me::ISCTOR1<GridClass, uint16_t>)) << "> 02_error";
-  ASSERT_TRUE ((me::ISCTOR2<GridClass, uint16_t, uint16_t>)) << "> 02_error";
+  EXPECT_FALSE (me::ISCTOR0<GridClass>)                         << "> 01";
+  ASSERT_TRUE ((me::ISCTOR1<GridClass, uint16_t>))              << "> 02";
+  ASSERT_TRUE ((me::ISCTOR2<GridClass, uint16_t, uint16_t>))    << "> 02";
 
   // testing actual grid size after initializing
   GridClass grid1 (0);
-  EXPECT_EQ (grid1.GetGridSize (), 0);
-  EXPECT_EQ (grid1.GetAliveCellsNumber (), 0);
+  EXPECT_EQ (grid1.GetGridSize (), 0)             << "> 03";
+  EXPECT_EQ (grid1.GetAliveCellsNumber (), 0)     << "> 03";
 
   GridClass grid2 (16);
-  EXPECT_EQ (grid2.GetGridSize (), 256);
-  EXPECT_EQ (grid2.GetAliveCellsNumber (), 0);
+  EXPECT_EQ (grid2.GetGridSize (), 256)           << "> 03";
+  EXPECT_EQ (grid2.GetAliveCellsNumber (), 0)     << "> 03";
 
   GridClass grid3 (0, 0);
-  EXPECT_EQ (grid3.GetGridSize (), 0);
-  EXPECT_EQ (grid3.GetAliveCellsNumber (), 0);
+  EXPECT_EQ (grid3.GetGridSize (), 0)             << "> 03";
+  EXPECT_EQ (grid3.GetAliveCellsNumber (), 0)     << "> 03";
 
   GridClass grid4 (240, 160);
-  EXPECT_EQ (grid4.GetGridSize (), 38400);
-  EXPECT_EQ (grid4.GetAliveCellsNumber (), 0);
+  EXPECT_EQ (grid4.GetGridSize (), 38400)         << "> 03";
+  EXPECT_EQ (grid4.GetAliveCellsNumber (), 0)     << "> 03";
+  // clang-format on
 }
 
 TEST_F (TestGridClass, SetStartEpoch)
 {
-  ASSERT_TRUE ((me::ISSETSTARTEPOCH1<GridClass, std::vector<uint16_t>, void>))
-      << "> 02_error";
+  ASSERT_TRUE ((me::ISSETSTARTEPOCH1<GridClass, std::vector<uint16_t>, void>)) << "> 02";
 
-  EXPECT_EQ (permanent.GetAliveCellsNumber (), startEpoch1.size ()) << "> 03_error";
-  EXPECT_TRUE (fu::comparecellspositions (startEpoch1, permanent)) << "> 04_error";
+  EXPECT_EQ (permanent.GetAliveCellsNumber (), startEpoch1.size ()) << "> 03";
+  EXPECT_TRUE (fu::comparecellspositions (startEpoch1, permanent)) << "> 04";
 
-  EXPECT_EQ (loop.GetAliveCellsNumber (), startEpoch2.size ()) << "> 03_error";
-  EXPECT_TRUE (fu::comparecellspositions (startEpoch2, loop)) << "> 04_error";
+  EXPECT_EQ (loop.GetAliveCellsNumber (), startEpoch2.size ()) << "> 03";
+  EXPECT_TRUE (fu::comparecellspositions (startEpoch2, loop)) << "> 04";
 
-  EXPECT_EQ (motion.GetAliveCellsNumber (), startEpoch3.size ()) << "> 03_error";
-  EXPECT_TRUE (fu::comparecellspositions (startEpoch3, motion)) << "> 04_error";
+  EXPECT_EQ (motion.GetAliveCellsNumber (), startEpoch3.size ()) << "> 03";
+  EXPECT_TRUE (fu::comparecellspositions (startEpoch3, motion)) << "> 04";
 }
 
 TEST_F (TestGridClass, CountNextEpoch)
 {
-  ASSERT_TRUE ((me::ISCOUNTNEXTEPOCH0<GridClass, void>)) << "> 02_error";
+  ASSERT_TRUE ((me::ISCOUNTNEXTEPOCH0<GridClass, void>)) << "> 02";
 
   // check permanent grid
   int epochs_to_check1 = 4;
@@ -132,8 +134,8 @@ TEST_F (TestGridClass, CountNextEpoch)
   for (int i = 1; i < epochs_to_check1; ++i)
     {
       permanent.CountNextEpoch ();
-      EXPECT_EQ (permanent.GetAliveCellsNumber (), permanent_epochs[i].size ());
-      EXPECT_TRUE (fu::comparecellspositions (permanent_epochs[i], permanent));
+      EXPECT_EQ (permanent.GetAliveCellsNumber (), permanent_epochs[i].size ()) << "> 03";
+      EXPECT_TRUE (fu::comparecellspositions (permanent_epochs[i], permanent)) << "> 04";
     }
 
   // check loop grid
@@ -151,8 +153,8 @@ TEST_F (TestGridClass, CountNextEpoch)
   for (int i = 1; i < epochs_to_check2; ++i)
     {
       loop.CountNextEpoch ();
-      EXPECT_EQ (loop.GetAliveCellsNumber (), loop_epochs[i].size ());
-      EXPECT_TRUE (fu::comparecellspositions (loop_epochs[i], loop));
+      EXPECT_EQ (loop.GetAliveCellsNumber (), loop_epochs[i].size ()) << "> 03";
+      EXPECT_TRUE (fu::comparecellspositions (loop_epochs[i], loop)) << "> 04";
     }
 
   // check motion grid
@@ -169,8 +171,8 @@ TEST_F (TestGridClass, CountNextEpoch)
   for (int i = 1; i < epochs_to_check3; ++i)
     {
       motion.CountNextEpoch ();
-      EXPECT_EQ (motion.GetAliveCellsNumber (), motion_epochs[i].size ());
-      EXPECT_TRUE (fu::comparecellspositions (motion_epochs[i], motion));
+      EXPECT_EQ (motion.GetAliveCellsNumber (), motion_epochs[i].size ()) << "> 03";
+      EXPECT_TRUE (fu::comparecellspositions (motion_epochs[i], motion)) << "> 04";
     }
 }
 
