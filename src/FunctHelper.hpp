@@ -7,6 +7,7 @@
  *       resetterminal
  *       printepoch
  *       comparecellspositions
+ *       testcountnextepoch
  *
  */
 
@@ -16,7 +17,9 @@
 #include "GreedClass.hpp"
 #include <algorithm>
 #include <cstdint>
+#include <gtest/gtest.h>
 #include <iostream>
+#include <string>
 #include <thread>
 #include <utility>
 #include <vector>
@@ -96,6 +99,20 @@ comparecellspositions (std::vector<uint16_t>& manual, const GridClass& grid)
     }
 
   return same;
+}
+
+// test given number of counted and expected epochs
+void
+testcountnextepoch (const std::string grid_name, GridClass& grid,
+                    std::vector<std::vector<uint16_t>> expectedepochs, const int epochs)
+{
+  std::cout << "> " << grid_name << std::endl;
+  for (int i = 0; i < epochs; ++i)
+    {
+      grid.CountNextEpoch ();
+      EXPECT_EQ (grid.GetAliveCellsNumber (), expectedepochs[i].size ()) << "> 03";
+      EXPECT_TRUE (comparecellspositions (expectedepochs[i], grid)) << "> 04";
+    }
 }
 
 }
