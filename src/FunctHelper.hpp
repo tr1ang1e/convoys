@@ -106,9 +106,10 @@ void
 testcountnextepoch (const std::string grid_name, GridClass& grid,
                     std::vector<std::vector<uint16_t>> expectedepochs, const int epochs)
 {
-  std::cout << "> " << grid_name << std::endl;
+  std::cout << "> TEST GRID = " << grid_name << std::endl;
   for (int i = 0; i < epochs; ++i)
     {
+      std::cout << "> EPOCH NUMBER = " << i << std::endl;
       grid.CountNextEpoch ();
       EXPECT_EQ (grid.GetAliveCellsNumber (), expectedepochs[i].size ()) << "> 03";
       EXPECT_TRUE (comparecellspositions (expectedepochs[i], grid)) << "> 04";

@@ -19,13 +19,16 @@ class GridClass
 
 public:
   GridClass () = delete;
-  GridClass (const Side& side);
-  GridClass (const Side& _x, const Side& _y);
+  GridClass (const Side&);
+  GridClass (const Side&, const Side&);
 
-  void SetStartEpoch (const std::vector<uint16_t>& alivecells);
+  void SetStartEpoch (const std::vector<uint16_t>&);
   uint32_t GetGridSize () const;
   uint32_t GetAliveCellsNumber () const;
   Grid GetCurrentEpoch () const;
   uint16_t GetEpochNum () const;
   void CountNextEpoch ();
+
+private:
+  void CreateGrid ();
 };
