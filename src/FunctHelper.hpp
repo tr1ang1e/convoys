@@ -61,11 +61,34 @@ printepoch (const std::vector<char>& field, const int& width)
     }
 }
 
+// check if test (manual) grid is valid
+bool iftestgridisvalid(std::vector<uint32_t>& manual, const GridClass& grid)
+{
+  
+  uint32_t max_idx = *std::max_element(manual.begin(),manual.end());
+  if (max_idx >= grid.GetGridSize())
+  {
+    std::cout << "> Some of test grid values greater than max tested grid index" << std::endl;
+    std::cout << ">   max test value = " << max_idx << std::endl;
+    std::cout << ">   tested grid size = " << grid.GetGridSize() << std::endl;
+    return false;
+  }
+
+  return true;
+}
+
+
 // compare manual entered cells positions with actual alive cells positions
 bool
-comparecellspositions (std::vector<uint16_t>& manual, const GridClass& grid)
+comparecellspositions (std::vector<uint32_t>& manual, const GridClass& grid)
 {
   bool same = true;
+
+  if (!iftestgridisvalid(manual, grid))
+  {
+    same = false;
+    return same;
+  }
 
   std::sort (manual.begin (), manual.end ());
   uint32_t gridsize = grid.GetGridSize ();
@@ -73,7 +96,6 @@ comparecellspositions (std::vector<uint16_t>& manual, const GridClass& grid)
 
   auto begin = manual.begin ();
   auto end = manual.end ();
-
   // if alive cells are expected (cell is alive but shouldn't be)
   for (int idx = 0; idx < gridsize; ++idx)
     {
@@ -97,14 +119,14 @@ comparecellspositions (std::vector<uint16_t>& manual, const GridClass& grid)
           return same;
         }
     }
-
+  
   return same;
 }
 
 // test given number of counted and expected epochs
 void
 testcountnextepoch (const std::string grid_name, GridClass& grid,
-                    std::vector<std::vector<uint16_t>> expectedepochs, const int epochs)
+                    std::vector<std::vector<uint32_t>> expectedepochs, const int epochs)
 {
   std::cout << "> TEST GRID = " << grid_name << std::endl;
   for (int i = 0; i < epochs; ++i)

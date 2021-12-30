@@ -10,23 +10,23 @@ class GridClass
   Grid grid;
   Grid temp;
 
-  using Side = uint16_t;
+  using Side = uint32_t;
   Side x;
   Side y;
 
-  uint16_t epochnum = 0;
+  uint32_t epochnum = 0;
   char cellchar = 'x';
 
 public:
   GridClass () = delete;
-  GridClass (const Side&);
-  GridClass (const Side&, const Side&);
+  GridClass (Side);
+  GridClass (Side, Side);
 
-  void SetStartEpoch (const std::vector<uint16_t>&);
+  void SetStartEpoch (const std::vector<Side>&);
   uint32_t GetGridSize () const;
   uint32_t GetAliveCellsNumber () const;
   Grid GetCurrentEpoch () const;
-  uint16_t GetEpochNum () const;
+  uint32_t GetEpochNum () const;
   void CountNextEpoch ();
 
 private:

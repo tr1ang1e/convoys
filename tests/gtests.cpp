@@ -15,7 +15,9 @@
  *  - gtests         TestGridClass using                    2.03.01
  *  - gtests         GridClass::CountNextEpoch              2.04.00
  *  - gtests         error massage shorter                  2.04.01
- *  - gtests         GridClass ctors fixed                  2.04.02
+ *  - GridClass      ctors fixed                            2.04.02
+ *  - GridClass      SetStartEpoch fixed                    2.04.03
+ *  - gtests         comparecellspositions fixed            2.04.04
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -44,9 +46,9 @@ protected:
   GridClass loop;
   GridClass motion;
 
-  std::vector<uint16_t> permanent_startepoch;
-  std::vector<uint16_t> loop_startepoch;
-  std::vector<uint16_t> motion_startepoch;
+  std::vector<uint32_t> permanent_startepoch;
+  std::vector<uint32_t> loop_startepoch;
+  std::vector<uint32_t> motion_startepoch;
 
   TestGridClass ()
       : permanent{ GridClass (16) }, loop{ GridClass (16) }, motion{ GridClass (16) }
@@ -71,29 +73,13 @@ protected:
 
 // clang-format off
 
-TEST_F (TestGridClass, GetInfoAboutGrid)
-{
-  EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>))               << "> 02";
-  EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>))       << "> 02";
-  EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<char>>))  << "> 02";
-  EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint16_t>))               << "> 02";
-}
-
-TEST_F (TestGridClass, IsInfoMethodConst)
-{
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize)))                << "> 05";
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber)))        << "> 05";
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch)))            << "> 05";
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum)))                << "> 05";
-}
-
 TEST_F (TestGridClass, CTORs)
 {
 
   // ctors existance
   EXPECT_FALSE (me::ISCTOR0<GridClass>)                         << "> 01";
-  ASSERT_TRUE ((me::ISCTOR1<GridClass, uint16_t>))              << "> 02";
-  ASSERT_TRUE ((me::ISCTOR2<GridClass, uint16_t, uint16_t>))    << "> 02";
+  ASSERT_TRUE ((me::ISCTOR1<GridClass, uint32_t>))              << "> 02";
+  ASSERT_TRUE ((me::ISCTOR2<GridClass, uint32_t, uint32_t>))    << "> 02";
 
   // testing actual grid size after initializing
   GridClass grid1 (0);
@@ -113,9 +99,25 @@ TEST_F (TestGridClass, CTORs)
   EXPECT_EQ (grid4.GetAliveCellsNumber (), 0)     << "> 03";
 }
 
+TEST_F (TestGridClass, AreInfoMethodsConst)
+{
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize)))                << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber)))        << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch)))            << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum)))                << "> 05";
+}
+
+TEST_F (TestGridClass, GetInfoAboutGrid)
+{
+  EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>))               << "> 02";
+  EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>))       << "> 02";
+  EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<char>>))  << "> 02";
+  EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint32_t>))               << "> 02";
+}
+
 TEST_F (TestGridClass, SetStartEpoch)
 {
-  ASSERT_TRUE ((me::ISSETSTARTEPOCH1<GridClass, std::vector<uint16_t>, void>)) << "> 02";
+  ASSERT_TRUE ((me::ISSETSTARTEPOCH1<GridClass, std::vector<uint32_t>, void>)) << "> 02";
 
   EXPECT_EQ (permanent.GetAliveCellsNumber (), permanent_startepoch.size ())   << "> 03";
   EXPECT_TRUE (fu::comparecellspositions (permanent_startepoch, permanent))    << "> 04";
@@ -133,12 +135,12 @@ TEST_F (TestGridClass, SetStartEpoch)
 
 //   // check permanent grid
 //   int permanent_epochstocheck = 4;
-//   std::vector<std::vector<uint16_t>> permanent_expectedepochs (permanent_epochstocheck, permanent_startepoch);
+//   std::vector<std::vector<uint32_t>> permanent_expectedepochs (permanent_epochstocheck, permanent_startepoch);
 //   fu::testcountnextepoch ("permanent", permanent, permanent_expectedepochs, permanent_epochstocheck);
 
 //   // check loop grid
 //   int loop_epochstocheck = 9;
-//   std::vector<std::vector<uint16_t>> loop_expectedepochs (loop_epochstocheck);
+//   std::vector<std::vector<uint32_t>> loop_expectedepochs (loop_epochstocheck);
 //   loop_expectedepochs [0] = loop_startepoch;
 //   loop_expectedepochs [1] = { 74,  89,  90,  91, 104, 106, 107, 108, 119, 123, 134, 138, 149, 150, 151, 153, 166, 167, 168, 183 };
 //   loop_expectedepochs [2] = { 73,  74,  75,  92, 104, 108, 119, 121, 124, 133, 136, 138, 149, 153, 165, 182, 183, 184 };
@@ -151,7 +153,7 @@ TEST_F (TestGridClass, SetStartEpoch)
 
 //   // check motion grid
 //   int motion_epochstocheck = 9;
-//   std::vector<std::vector<uint16_t>> motion_expectedepochs (motion_epochstocheck);
+//   std::vector<std::vector<uint32_t>> motion_expectedepochs (motion_epochstocheck);
 //   motion_expectedepochs[0] = motion_startepoch;
 //   motion_expectedepochs[1] = { 45, 60, 76, 77, 78 };
 //   motion_expectedepochs[2] = { 60, 62, 76, 77, 93 };
