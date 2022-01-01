@@ -23,9 +23,25 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#include <concepts>
 
 namespace functions
 {
+
+
+// debug by marks printing
+template <typename T>
+concept MARK =
+  std::is_same<T, const char*>::value ||
+  std::is_same<T, int>::value
+;
+
+// debug by marks printing
+template <MARK T>
+void mark(T massage)
+{
+  std::cout << "> MARK : " << massage << std::endl;
+}
 
 // processing delay
 void
@@ -65,7 +81,11 @@ printepoch (const std::vector<char>& field, const int& width)
 bool iftestgridisvalid(std::vector<uint32_t>& manual, const GridClass& grid)
 {
   
-  uint32_t max_idx = *std::max_element(manual.begin(),manual.end());
+  // check if test (manual) grid is empty (empty is valid)
+  if (!manual.size()) return true;
+
+  // check if every value in the test (manual) grid is less than grid size
+  uint32_t max_idx = *std::max_element(manual.begin(), manual.end());
   if (max_idx >= grid.GetGridSize())
   {
     std::cout << "> Some of test grid values greater than max tested grid index" << std::endl;
@@ -96,7 +116,7 @@ comparecellspositions (std::vector<uint32_t>& manual, const GridClass& grid)
 
   auto begin = manual.begin ();
   auto end = manual.end ();
-  // if alive cells are expected (cell is alive but shouldn't be)
+  // if alive cells are not expected (cell is alive but shouldn't be)
   for (int idx = 0; idx < gridsize; ++idx)
     {
       if (currentepoch[idx])
@@ -110,7 +130,7 @@ comparecellspositions (std::vector<uint32_t>& manual, const GridClass& grid)
         }
     }
 
-  // if expected cells are alive (cell should be alive but is not)
+  // if expected cells are not alive (cell should be alive but is not)
   for (const auto& el : manual)
     {
       if (!currentepoch[el])
