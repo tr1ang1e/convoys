@@ -6,7 +6,7 @@
 
 class GridClass
 {
-  using Grid = std::vector<char>;
+  using Grid = std::vector<bool>;
   Grid grid;
   Grid next;
 
@@ -15,7 +15,6 @@ class GridClass
   Side y;
 
   uint32_t epochnum = 0;
-  char cellchar = 'x';
 
 public:
   GridClass () = delete;

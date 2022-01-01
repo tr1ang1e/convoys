@@ -112,7 +112,7 @@ comparecellspositions (std::vector<uint32_t>& manual, const GridClass& grid)
 
   std::sort (manual.begin (), manual.end ());
   uint32_t gridsize = grid.GetGridSize ();
-  std::vector<char> currentepoch = grid.GetCurrentEpoch ();
+  std::vector<bool> currentepoch = grid.GetCurrentEpoch ();
 
   auto begin = manual.begin ();
   auto end = manual.end ();

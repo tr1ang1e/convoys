@@ -13,13 +13,15 @@
  *  - gtests         add constancy checking possibility     2.02.03
  *  - GridClass      SetStartEpoch                          2.03.00
  *  - gtests         TestGridClass using                    2.03.01
- *  - gtests         GridClass::CountNextEpoch              2.04.00
+ *  - gtests         GridClass::CountNextEpoch exists       2.04.00
  *  - gtests         error massage shorter                  2.04.01
  *  - GridClass      ctors fixed                            2.04.02
  *  - GridClass      SetStartEpoch fixed                    2.04.03
  *  - gtests         comparecellspositions fixed            2.04.04
  *  - gtests         iftestgridisvalid fixed                2.04.05
  *  - GridClass      CountNextEpoch                         2.05.00
+ *  - GridClass      remove cellchar field                  2.05.01
+ *  - gtests         GridClass::CountNextEpoch is tested    2.05.02
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -68,7 +70,7 @@ protected:
         = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };
     loop.SetStartEpoch (loop_startepoch);
 
-    motion_startepoch = { 61, 75, 76, 92, 93 };
+    motion_startepoch = { 46, 60, 61, 77, 78 };
     motion.SetStartEpoch (motion_startepoch);
   }
 };
@@ -113,7 +115,7 @@ TEST_F (TestGridClass, GetInfoAboutGrid)
 {
   EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>))               << "> 02";
   EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>))       << "> 02";
-  EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<char>>))  << "> 02";
+  EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<bool>>))  << "> 02";
   EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint32_t>))               << "> 02";
 }
 
@@ -135,10 +137,10 @@ TEST_F (TestGridClass, CountNextEpoch)
 {
   ASSERT_TRUE ((me::ISCOUNTNEXTEPOCH0<GridClass, void>)) << "> 02";
 
-  // // check permanent grid
-  // int permanent_epochstocheck = 4;
-  // std::vector<std::vector<uint32_t>> permanent_expectedepochs (permanent_epochstocheck, permanent_startepoch);
-  // fu::testcountnextepoch ("permanent", permanent, permanent_expectedepochs, permanent_epochstocheck);
+  // check permanent grid
+  int permanent_epochstocheck = 4;
+  std::vector<std::vector<uint32_t>> permanent_expectedepochs (permanent_epochstocheck, permanent_startepoch);
+  fu::testcountnextepoch ("permanent", permanent, permanent_expectedepochs, permanent_epochstocheck);
 
   // check loop grid
   int loop_epochstocheck = 9;
@@ -154,19 +156,19 @@ TEST_F (TestGridClass, CountNextEpoch)
   loop_expectedepochs [8] = loop_startepoch;
   fu::testcountnextepoch ("loop", loop, loop_expectedepochs, loop_epochstocheck);
 
-  // // check motion grid
-  // int motion_epochstocheck = 9;
-  // std::vector<std::vector<uint32_t>> motion_expectedepochs (motion_epochstocheck);
-  // motion_expectedepochs[0] = motion_startepoch;
-  // motion_expectedepochs[1] = { 45, 60, 76, 77, 78 };
-  // motion_expectedepochs[2] = { 60, 62, 76, 77, 93 };
-  // motion_expectedepochs[3] = { 60, 76, 78, 92, 93 };
-  // motion_expectedepochs[4] = { 61, 75, 76, 92, 93 };
-  // motion_expectedepochs[5] = { 60, 75, 91, 92, 93 };
-  // motion_expectedepochs[6] = { 75, 77, 91, 92, 108 };
-  // motion_expectedepochs[7] = { 75, 91, 93, 107, 108 };
-  // motion_expectedepochs[8] = { 76, 90, 91, 107, 108 };
-  // fu::testcountnextepoch ("motion", motion, motion_expectedepochs, motion_epochstocheck);
+  // check motion grid
+  int motion_epochstocheck = 9;
+  std::vector<std::vector<uint32_t>> motion_expectedepochs (motion_epochstocheck);
+  motion_expectedepochs[0] = motion_startepoch;
+  motion_expectedepochs[1] = { 45, 60, 76, 77, 78 };
+  motion_expectedepochs[2] = { 60, 62, 76, 77, 93 };
+  motion_expectedepochs[3] = { 60, 76, 78, 92, 93 };
+  motion_expectedepochs[4] = { 61, 75, 76, 92, 93 };
+  motion_expectedepochs[5] = { 60, 75, 91, 92, 93 };
+  motion_expectedepochs[6] = { 75, 77, 91, 92, 108 };
+  motion_expectedepochs[7] = { 75, 91, 93, 107, 108 };
+  motion_expectedepochs[8] = { 76, 90, 91, 107, 108 };
+  fu::testcountnextepoch ("motion", motion, motion_expectedepochs, motion_epochstocheck);
 }
 
 // clang-format on
