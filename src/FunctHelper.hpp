@@ -16,6 +16,7 @@
 // required headers
 #include "GreedClass.hpp"
 #include <algorithm>
+#include <concepts>
 #include <cstdint>
 #include <gtest/gtest.h>
 #include <iostream>
@@ -23,22 +24,18 @@
 #include <thread>
 #include <utility>
 #include <vector>
-#include <concepts>
 
 namespace functions
 {
 
-
 // debug by marks printing
 template <typename T>
-concept MARK =
-  std::is_same<T, const char*>::value ||
-  std::is_same<T, int>::value
-;
+concept MARK = std::is_same<T, const char*>::value || std::is_same<T, int>::value;
 
 // debug by marks printing
 template <MARK T>
-void mark(T massage)
+void
+mark (T massage)
 {
   std::cout << "> MARK : " << massage << std::endl;
 }
@@ -78,25 +75,27 @@ printepoch (const std::vector<char>& field, const int& width)
 }
 
 // check if test (manual) grid is valid
-bool iftestgridisvalid(std::vector<uint32_t>& manual, const GridClass& grid)
+bool
+iftestgridisvalid (std::vector<uint32_t>& manual, const GridClass& grid)
 {
-  
+
   // check if test (manual) grid is empty (empty is valid)
-  if (!manual.size()) return true;
+  if (!manual.size ())
+    return true;
 
   // check if every value in the test (manual) grid is less than grid size
-  uint32_t max_idx = *std::max_element(manual.begin(), manual.end());
-  if (max_idx >= grid.GetGridSize())
-  {
-    std::cout << "> Some of test grid values greater than max tested grid index" << std::endl;
-    std::cout << ">   max test value = " << max_idx << std::endl;
-    std::cout << ">   tested grid size = " << grid.GetGridSize() << std::endl;
-    return false;
-  }
+  uint32_t max_idx = *std::max_element (manual.begin (), manual.end ());
+  if (max_idx >= grid.GetGridSize ())
+    {
+      std::cout << "> Some of test grid values greater than max tested grid index"
+                << std::endl;
+      std::cout << ">   max test value = " << max_idx << std::endl;
+      std::cout << ">   tested grid size = " << grid.GetGridSize () << std::endl;
+      return false;
+    }
 
   return true;
 }
-
 
 // compare manual entered cells positions with actual alive cells positions
 bool
@@ -104,11 +103,11 @@ comparecellspositions (std::vector<uint32_t>& manual, const GridClass& grid)
 {
   bool same = true;
 
-  if (!iftestgridisvalid(manual, grid))
-  {
-    same = false;
-    return same;
-  }
+  if (!iftestgridisvalid (manual, grid))
+    {
+      same = false;
+      return same;
+    }
 
   std::sort (manual.begin (), manual.end ());
   uint32_t gridsize = grid.GetGridSize ();
@@ -139,7 +138,7 @@ comparecellspositions (std::vector<uint32_t>& manual, const GridClass& grid)
           return same;
         }
     }
-  
+
   return same;
 }
 

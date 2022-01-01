@@ -30,5 +30,5 @@ public:
 
 private:
   void CreateGrid ();
-  bool CheckNeighbours(uint32_t);
+  bool CheckNeighbours (uint32_t);
 };
