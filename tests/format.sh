@@ -4,16 +4,19 @@
 clang-format gtests.cpp > _gtests.cpp
 clang-format ../src/MacroHelper.hpp > ../src/_MacroHelper.hpp
 clang-format ../src/FunctHelper.hpp > ../src/_FunctHelper.hpp
+clang-format _FunctHelper.cpp > FunctHelper.cpp
 
 # GTESTS : replace current gtests files with formatted
 cp -f _gtests.cpp gtests.cpp
 cp -f ../src/_MacroHelper.hpp ../src/MacroHelper.hpp
 cp -f ../src/_FunctHelper.hpp ../src/FunctHelper.hpp
+cp -f FunctHelper.cpp _FunctHelper.cpp
 
 # GTESTS : remove temporary gtests files
 rm _gtests.cpp
 rm ../src/_MacroHelper.hpp
 rm ../src/_FunctHelper.hpp
+rm FunctHelper.cpp
 
 # PROJECT : format project files
 clang-format _GridClass.cpp > GridClass.cpp

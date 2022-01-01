@@ -23,6 +23,8 @@
  *  - GridClass      remove cellchar field                  2.05.01
  *  - gtests         GridClass::CountNextEpoch is tested    2.05.02
  *  - GridClass      wrong naming fixed                     2.05.03
+ *  - project        static library for gtests              2.05.04
+ *  - gtests         comparecellspositions fixed            2.05.05
  *
  *  Error codes
  *  01 = exists but forbidden

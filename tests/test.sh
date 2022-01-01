@@ -22,11 +22,14 @@ fi
 #compiler options
 std="-std=c++20"
 gtestlibs="-lgtest -lgtest_main -lpthread"
-lib="../lib/"
+libpath="../lib/"
 exename="_runtests"
 
-echo -e
+#other variables
+libname="test"      # spaces are permitted
 control=0
+
+echo -e
 
 # compile GridClass class
 if g++ $std -c _GridClass.cpp -o _GridClass.o
@@ -46,11 +49,20 @@ else
   errormassage "class Print"
 fi
 
+# compile FunctHelper
+if g++ $std -c _FunctHelper.cpp -o _FunctHelper.o
+then
+  echo "+ helper object file compilation succeed"
+  let "control++"
+else
+  errormassage "helper"
+fi
+
 # create static project library
-if ar rc libproject.a _GridClass.o _Print.o
+if ar rc lib$libname.a _GridClass.o _Print.o _FunctHelper.o
 then
   echo "+ project static library creation succeed"
-  mv -f ./libproject.a "$lib"
+  mv -f ./lib$libname.a "$libpath"
   let "control++"
 else
   errormassage "project static library"
@@ -66,11 +78,11 @@ else
 fi
 
 # if both project and gtests are compiled then build tests
-if [[ $control -eq 4 ]]
+if [[ $control -eq 5 ]]
 then
 
   # if linking succeed
-  if g++ _gtests.o $gtestlibs -L"$lib" -lproject -o $exename
+  if g++ _gtests.o $gtestlibs -L"$libpath" -l$libname -o $exename
   then
 
     echo "+ test building succeed"
@@ -96,15 +108,15 @@ then
         awk "/.*${tostdout}.*/,/^$/" "$logfile"
       fi
     fi
-  
-    # clean directory
-    echo -e
-    if rm _gtests.o _Print.o _GridClass.o
-    then echo "+ directory cleaned"
-    else echo "- directory not cleaned"
-    fi
 
   else errormassage "linking stage of"
   fi
 
+fi
+
+# clean directory
+echo -e
+if rm _gtests.o _Print.o _GridClass.o _FunctHelper.o
+then echo "+ directory cleaned"
+else echo "- directory not cleaned"
 fi
