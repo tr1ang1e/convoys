@@ -8,7 +8,7 @@ class GridClass
 {
   using Grid = std::vector<char>;
   Grid grid;
-  Grid temp;
+  Grid next;
 
   using Side = uint32_t;
   Side x;
@@ -31,4 +31,5 @@ public:
 
 private:
   void CreateGrid ();
+  bool CheckNeighbours(uint32_t);
 };
