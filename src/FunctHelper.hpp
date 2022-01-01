@@ -14,7 +14,7 @@
 #pragma once
 
 // required headers
-#include "GreedClass.hpp"
+#include "GridClass.hpp"
 #include <algorithm>
 #include <concepts>
 #include <cstdint>

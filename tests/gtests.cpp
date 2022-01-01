@@ -22,6 +22,7 @@
  *  - GridClass      CountNextEpoch                         2.05.00
  *  - GridClass      remove cellchar field                  2.05.01
  *  - gtests         GridClass::CountNextEpoch is tested    2.05.02
+ *  - GridClass      wrong naming fixed                     2.05.03
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -40,7 +41,7 @@
 #include <iostream>
 #include <vector>
 
-#include "../src/GreedClass.hpp"
+#include "../src/GridClass.hpp"
 #include "../src/Print.hpp"
 
 class TestGridClass : public ::testing::Test
