@@ -41,7 +41,6 @@
     CLASS();                      \
   };            
 
-
 // ctor with 1 input argument
 #define ISCTOR1()                                                           \
   template <typename CLASS, typename ARG1>                                  \
@@ -78,7 +77,17 @@
     { std::declval<CLASS>().method(std::declval<ARG1>()) } -> std::same_as<RET>;          \
   };
 
+// method with 2 input arguments
+#define ISMETHOD2(METHOD, method)                                                         \
+  template <typename CLASS, typename ARG1, typename ARG2, typename RET>                   \
+  concept IS ## METHOD ## 2 =                                                             \
+  requires( )                                                                             \
+  {                                                                                       \
+    { std::declval<CLASS>().method(std::declval<ARG1>(), std::declval<ARG2>()) }          \
+    -> std::same_as<RET>;                                                                 \
+  };
 
+// method constancy
 #define ISMETHODCONST(CLASS, METHOD)  \
 me::ISMETHODCONST<CLASS, decltype(&CLASS::METHOD)>
 
@@ -91,14 +100,25 @@ ISCTOR0 ();
 ISCTOR1 ();
 ISCTOR2 ();
 
+// GridClass
 ISMETHOD0 (GETGRIDSIZE, GetGridSize);
+ISMETHOD0 (GETLINESIZE, GetLineSize);
 ISMETHOD0 (GETCURRENTEPOCH, GetCurrentEpoch);
 ISMETHOD0 (GETALIVECELLSNUMBER, GetAliveCellsNumber);
 ISMETHOD0 (GETEPOCHNUM, GetEpochNum);
 ISMETHOD0 (COUNTNEXTEPOCH, CountNextEpoch);
-ISMETHOD0 (GETGRID, GetGrid);
-
 ISMETHOD1 (SETSTARTEPOCH, SetStartEpoch);
+
+// PrintClass
+ISMETHOD0 (GETGRID, GetGrid);
+ISMETHOD0 (RESETTERMINAL, ResetTerminal);
+ISMETHOD0 (PRINTEPOCH, PrintEpoch);
+ISMETHOD0 (PRINTEPOCHNUM, PrintEpochNum);
+ISMETHOD0 (GETALIVECHAR, GetAliveChar);
+ISMETHOD0 (GETDEADCHAR, GetDeadChar);
+ISMETHOD0 (GETDELAY, GetDelay);
+ISMETHOD1 (SETFRAMESPERSECOND, SetFramesPerSecond);
+ISMETHOD2 (SETCHARS, SetChars);
 
 }
 

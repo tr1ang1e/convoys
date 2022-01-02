@@ -25,8 +25,17 @@
  *  - GridClass      wrong naming fixed                     2.05.03
  *  - project        static library for gtests              2.05.04
  *  - gtests         comparecellspositions fixed            2.05.05
- *  - gtests         PrinterClass ctors                     3.01.00
- *  - PrinterClass   ctors                                  3.02.00
+ *  - gtests         PrintClass ctors                       3.01.00
+ *  - PrintClass     ctors                                  3.02.00
+ *  - PrintClass     ResetTerminal                          3.03.00
+ *  - PrintClass     SetChars                               3.04.00
+ *  - GridClass      GetLineSize                            3.04.01
+ *  - gtests         test.sh output is corrected            3.04.02
+ *  - GridClass      CountNextEpoch fixed                   3.04.03
+ *  - PrintClass     PrintEpoch                             3.05.00
+ *  - PrintClass     PrintEpochNum                          3.05.01
+ *  - gtests         PrintClass info methods                3.06.00
+ *  - PrintClass     info methods                           3.06.01
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -111,14 +120,21 @@ TEST_F (TestGridClass, CTORs)
 TEST_F (TestGridClass, GetInfoAboutGrid)
 {
   EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>))               << "> 02";
+  EXPECT_TRUE ((me::ISGETLINESIZE0<GridClass, uint32_t>))               << "> 02";
   EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>))       << "> 02";
   EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<bool>>))  << "> 02";
   EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint32_t>))               << "> 02";
+
+  EXPECT_EQ (permanent.GetGridSize (), 257)     << "> 04";
+  EXPECT_EQ (loop.GetLineSize (), 16)           << "> 04";
+  EXPECT_EQ (motion.GetAliveCellsNumber (), 5)  << "> 04";
+  EXPECT_EQ (motion.GetEpochNum(), 0)           << "> 04";
 }
 
 TEST_F (TestGridClass, AreInfoMethodsConst)
 {
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize)))                << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetLineSize)))                << "> 05";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber)))        << "> 05";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch)))            << "> 05";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum)))                << "> 05";
@@ -146,6 +162,7 @@ TEST_F (TestGridClass, CountNextEpoch)
   int permanent_epochstocheck = 4;
   std::vector<std::vector<uint32_t>> permanent_expectedepochs (permanent_epochstocheck, permanent_startepoch);
   fu::testcountnextepoch ("permanent", permanent, permanent_expectedepochs, permanent_epochstocheck);
+  EXPECT_EQ (permanent.GetEpochNum(), 4)  << "> 04";
 
   // check loop grid
   int loop_epochstocheck = 9;
@@ -160,6 +177,7 @@ TEST_F (TestGridClass, CountNextEpoch)
   loop_expectedepochs [7] = { 89,  90,  91, 105, 106, 107, 121, 122, 123, 134, 135, 136, 150, 151, 152, 166, 167, 168 };
   loop_expectedepochs [8] = loop_startepoch;
   fu::testcountnextepoch ("loop", loop, loop_expectedepochs, loop_epochstocheck);
+  EXPECT_EQ (loop.GetEpochNum(), 9)  << "> 04";
 
   // check motion grid
   int motion_epochstocheck = 9;
@@ -174,6 +192,7 @@ TEST_F (TestGridClass, CountNextEpoch)
   motion_expectedepochs[7] = { 75, 91, 93, 107, 108 };
   motion_expectedepochs[8] = { 76, 90, 91, 107, 108 };
   fu::testcountnextepoch ("motion", motion, motion_expectedepochs, motion_epochstocheck);
+  EXPECT_EQ (motion.GetEpochNum(), 9)  << "> 04";
 }
 
 // clang-format on
@@ -200,21 +219,50 @@ protected:
 
 TEST_F (TestPrintClass, CTORs)
 {
-  EXPECT_FALSE(me::ISCTOR0<PrintClass>)                        << "01";
-  EXPECT_FALSE((me::ISCTOR1<PrintClass, GridClass>))           << "01";
-  ASSERT_TRUE((me::ISCTOR1<PrintClass, GridClass* const> ))    << "02";
+  EXPECT_FALSE(me::ISCTOR0<PrintClass>)                           << "> 01";
+  EXPECT_FALSE((me::ISCTOR1<PrintClass, GridClass>))              << "> 01";
+  ASSERT_TRUE((me::ISCTOR1<PrintClass, GridClass* const> ))       << "> 02";
   
-  EXPECT_NE(printer.GetGrid(), nullptr);
+  EXPECT_NE(printer.GetGrid(), nullptr)    << "> 04";  
+  EXPECT_EQ(printer.GetAliveChar(), 'x')   << "> 04"; 
+  EXPECT_EQ(printer.GetDeadChar(), ' ')    << "> 04"; 
+  EXPECT_EQ(printer.GetDelay(), 43)        << "> 04";
 }
 
 TEST_F (TestPrintClass, GetInfoAboutPrinter)
 {
-  EXPECT_TRUE((me::ISGETGRID0<PrintClass, const GridClass*>)) << "02";
+  EXPECT_TRUE((me::ISGETGRID0<PrintClass, const GridClass*>))    << "> 02";
+  EXPECT_TRUE((me::ISGETALIVECHAR0<PrintClass, char>))           << "> 02";
+  EXPECT_TRUE((me::ISGETDEADCHAR0<PrintClass, char>))            << "> 02";
+  EXPECT_TRUE((me::ISGETDELAY0<PrintClass, uint32_t>))           << "> 02";
 }
 
 TEST_F (TestPrintClass, AreInfoMethodsConst)
 {
-  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid))) << "05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid)))              << "> 05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetAliveChar)))         << "> 05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetDeadChar)))          << "> 05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetDelay)))             << "> 05";
+}
+
+TEST_F (TestPrintClass, SetMethods)
+{
+  ASSERT_TRUE ((me::ISSETCHARS2<PrintClass, char, char, void>))              << "> 02";
+  ASSERT_TRUE ((me::ISSETFRAMESPERSECOND1<PrintClass, uint32_t, void>))      << "> 02";
+
+  printer.SetChars('o', 'x');
+  EXPECT_EQ (printer.GetAliveChar(), 'o')  << "> 04";
+  EXPECT_EQ (printer.GetDeadChar(), 'x')   << "> 04";
+
+  printer.SetFramesPerSecond(30);
+  EXPECT_EQ (printer.GetDelay(), 34)       << "> 04";
+}
+
+TEST_F (TestPrintClass, DefaultTerminalPrinting)
+{
+  EXPECT_TRUE ((me::ISRESETTERMINAL0<PrintClass, void>))                     << "> 02";
+  EXPECT_TRUE ((me::ISPRINTEPOCH0<PrintClass, void>))                        << "> 02";
+  EXPECT_TRUE ((me::ISPRINTEPOCHNUM0<PrintClass, void>))                     << "> 02";
 }
 
 // clang-format on
@@ -223,20 +271,34 @@ int
 main (int argc, char* argv[])
 {
 
-  // testing animation in terminal
-  bool b = false;
-  if (b)
+  // // testing animation in terminal
+  // bool b = false;
+  // if (b)
+  //   {
+  //     std::vector<char> epoch (625, 'x');
+  //     for (int i = 0; i < 625; ++i)
+  //       {
+  //         fu::printepoch (epoch, 25);
+  //         epoch[i] = 0;
+  //         fu::delayprocess (35);
+  //         fu::resetterminal ();
+  //       }
+  //   }
+
+  GridClass grid (16);
+  std::vector<uint32_t> startepoch
+      = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };
+  grid.SetStartEpoch (startepoch);
+
+  PrintClass printer (&grid);
+  printer.SetFramesPerSecond (8);
+
+  for (int i = 0; i < 50; ++i)
     {
-      std::vector<char> epoch (625, 'x');
-      for (int i = 0; i < 625; ++i)
-        {
-          fu::printepoch (epoch, 25);
-          epoch[i] = 0;
-          fu::delayprocess (35);
-          fu::resetterminal ();
-        }
+      printer.PrintEpoch ();
+      grid.CountNextEpoch ();
     }
 
-  ::testing::InitGoogleTest (&argc, argv);
-  return RUN_ALL_TESTS ();
+  // ::testing::InitGoogleTest (&argc, argv);
+  // return RUN_ALL_TESTS ();
 }
