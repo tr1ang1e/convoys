@@ -181,20 +181,18 @@ TEST_F (TestGridClass, CountNextEpoch)
 class TestPrintClass : public ::testing::Test
 {
 
-protected:  
-
+protected:
   GridClass grid;
   PrintClass printer;
 
-  TestPrintClass() 
-  : grid { GridClass (16) }, printer { &grid }
-  {
-  }
+  TestPrintClass () : grid{ GridClass (16) }, printer{ &grid } {}
 
-  void SetUp() override
+  void
+  SetUp () override
   {
-    std::vector<uint32_t> startepoch = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };
-    grid.SetStartEpoch(startepoch);
+    std::vector<uint32_t> startepoch
+        = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };
+    grid.SetStartEpoch (startepoch);
   }
 };
 
@@ -218,7 +216,6 @@ TEST_F (TestPrintClass, AreInfoMethodsConst)
 {
   EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid))) << "05";
 }
-
 
 // clang-format on
 

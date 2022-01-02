@@ -8,10 +8,8 @@ class PrintClass
   GridClass* const grid;
 
 public:
-
   PrintClass () = delete;
   PrintClass (GridClass*);
 
-  const GridClass* GetGrid() const;
-
+  const GridClass* GetGrid () const;
 };
