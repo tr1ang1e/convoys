@@ -25,9 +25,11 @@
  *  - GridClass      wrong naming fixed                     2.05.03
  *  - project        static library for gtests              2.05.04
  *  - gtests         comparecellspositions fixed            2.05.05
- *  - gtests         PrinterClass ctors                     3.01.00
- *  - PrinterClass   ctors                                  3.02.00
- *  - PrinterClass   ResetTerminal                          3.03.00
+ *  - gtests         PrintClass ctors                       3.01.00
+ *  - PrintClass     ctors                                  3.02.00
+ *  - PrintClass     ResetTerminal                          3.03.00
+ *  - PrintClass     SetChars                               3.04.00
+ *  - GridClass      GetLineSize                            3.04.01
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -112,6 +114,7 @@ TEST_F (TestGridClass, CTORs)
 TEST_F (TestGridClass, GetInfoAboutGrid)
 {
   EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>))               << "> 02";
+  EXPECT_TRUE ((me::ISGETLINESIZE0<GridClass, uint32_t>))               << "> 02";
   EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>))       << "> 02";
   EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<bool>>))  << "> 02";
   EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint32_t>))               << "> 02";
@@ -120,6 +123,7 @@ TEST_F (TestGridClass, GetInfoAboutGrid)
 TEST_F (TestGridClass, AreInfoMethodsConst)
 {
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize)))                << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetLineSize)))                << "> 05";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber)))        << "> 05";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch)))            << "> 05";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum)))                << "> 05";
@@ -201,26 +205,28 @@ protected:
 
 TEST_F (TestPrintClass, CTORs)
 {
-  EXPECT_FALSE(me::ISCTOR0<PrintClass>)                        << "01";
-  EXPECT_FALSE((me::ISCTOR1<PrintClass, GridClass>))           << "01";
-  ASSERT_TRUE((me::ISCTOR1<PrintClass, GridClass* const> ))    << "02";
+  EXPECT_FALSE(me::ISCTOR0<PrintClass>)                         << "> 01";
+  EXPECT_FALSE((me::ISCTOR1<PrintClass, GridClass>))            << "> 01";
+  ASSERT_TRUE((me::ISCTOR1<PrintClass, GridClass* const> ))     << "> 02";
   
   EXPECT_NE(printer.GetGrid(), nullptr);
 }
 
 TEST_F (TestPrintClass, GetInfoAboutPrinter)
 {
-  EXPECT_TRUE((me::ISGETGRID0<PrintClass, const GridClass*>)) << "02";
+  EXPECT_TRUE((me::ISGETGRID0<PrintClass, const GridClass*>))  << "> 02";
 }
 
 TEST_F (TestPrintClass, AreInfoMethodsConst)
 {
-  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid)))           << "05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid)))            << "> 05";
 }
 
 TEST_F (TestPrintClass, DefaultTerminal)
 {
-  EXPECT_TRUE((me::ISRESETTERMINAL0<PrintClass, void>))       << "02";
+  EXPECT_TRUE((me::ISSETCHARS2<PrintClass, char, char, void>)) << "> 02";
+  EXPECT_TRUE((me::ISRESETTERMINAL0<PrintClass, void>))        << "> 02";
+  EXPECT_TRUE((me::ISPRINTEPOCH0<PrintClass, void>))           << "> 02"; 
 }
 
 // clang-format on

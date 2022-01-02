@@ -26,6 +26,7 @@ public:
 
   // get info methods
   uint32_t GetGridSize () const;
+  uint32_t GetLineSize () const;
   uint32_t GetAliveCellsNumber () const;
   Grid GetCurrentEpoch () const;
   uint32_t GetEpochNum () const;
