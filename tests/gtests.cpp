@@ -27,6 +27,7 @@
  *  - gtests         comparecellspositions fixed            2.05.05
  *  - gtests         PrinterClass ctors                     3.01.00
  *  - PrinterClass   ctors                                  3.02.00
+ *  - PrinterClass   ResetTerminal                          3.03.00
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -214,7 +215,12 @@ TEST_F (TestPrintClass, GetInfoAboutPrinter)
 
 TEST_F (TestPrintClass, AreInfoMethodsConst)
 {
-  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid))) << "05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid)))           << "05";
+}
+
+TEST_F (TestPrintClass, DefaultTerminal)
+{
+  EXPECT_TRUE((me::ISRESETTERMINAL0<PrintClass, void>))       << "02";
 }
 
 // clang-format on

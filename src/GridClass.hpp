@@ -22,11 +22,13 @@ public:
   GridClass (Side, Side);
 
   void SetStartEpoch (const std::vector<Side>&);
+  void CountNextEpoch ();
+
+  // get info methods
   uint32_t GetGridSize () const;
   uint32_t GetAliveCellsNumber () const;
   Grid GetCurrentEpoch () const;
   uint32_t GetEpochNum () const;
-  void CountNextEpoch ();
 
 private:
   void CreateGrid ();
