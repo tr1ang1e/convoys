@@ -34,7 +34,7 @@ echo -e
 # compile GridClass class
 if g++ $std -c _GridClass.cpp -o _GridClass.o
 then 
-  echo "+ class GridClass object file compilation succeed"
+  echo -e "+ class GridClass object file compilation \t succeed"
   let "control++"
 else
   errormassage "class GridClass"
@@ -43,7 +43,7 @@ fi
 # compile PrintClass class
 if g++ $std -c _PrintClass.cpp -o _PrintClass.o
 then 
-  echo "+ class PrintClass object file compilation succeed"
+  echo -e "+ class PrintClass object file compilation \t succeed"
   let "control++"
 else
   errormassage "class PrintClass"
@@ -52,7 +52,7 @@ fi
 # compile FunctHelper
 if g++ $std -c _FunctHelper.cpp -o _FunctHelper.o
 then
-  echo "+ helper object file compilation succeed"
+  echo -e "+ helper object file compilation \t\t succeed"
   let "control++"
 else
   errormassage "helper"
@@ -61,7 +61,7 @@ fi
 # create static project library
 if ar rc lib$libname.a _GridClass.o _PrintClass.o _FunctHelper.o
 then
-  echo "+ test static library creation succeed"
+  echo -e "+ test static library creation \t\t\t succeed"
   mv -f ./lib$libname.a "$libpath"
   let "control++"
 else
@@ -71,7 +71,7 @@ fi
 # compile gtests
 if g++ $std -c gtests.cpp -o _gtests.o
 then 
-  echo "+ gtests object file compilation succeed"
+  echo -e "+ gtests object file compilation \t\t succeed"
   let "control++"
 else 
   errormassage "gtests"
@@ -85,8 +85,8 @@ then
   if g++ _gtests.o $gtestlibs -L"$libpath" -l$libname -o $exename
   then
 
-    echo "+ test building succeed"
-    echo "+ running tests "
+    echo -e "+ test building \t\t\t\t succeed"
+    echo -e "+ running tests \t\t\t\t succeed"
 
     # prepare logfile ang execute test
     logfile="./_testlog.txt"
@@ -98,11 +98,11 @@ then
 
     # if test succeed ( RUN_ALL_TESTS() returned 0 value )
     if [[ $result -ne 0 ]]
-    then echo "- gtests failed"
+    then echo -e "- gtests \t\t\t\t failed"
     else  # print final test state
       if [[ $output -eq 0 ]]
       then
-        echo "+ gtests succeed (> $logfile)"
+        echo -e "+ gtests (> $logfile) \t\t\t succeed "
         echo -e
         tostdout="Global test environment tear-down"
         awk "/.*${tostdout}.*/,/^$/" "$logfile"

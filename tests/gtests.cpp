@@ -30,6 +30,7 @@
  *  - PrintClass     ResetTerminal                          3.03.00
  *  - PrintClass     SetChars                               3.04.00
  *  - GridClass      GetLineSize                            3.04.01
+ *  - gtest          test.sh output is corrected            3.04.02
  *
  *  Error codes
  *  01 = exists but forbidden
