@@ -31,6 +31,7 @@
  *  - PrintClass     SetChars                               3.04.00
  *  - GridClass      GetLineSize                            3.04.01
  *  - gtest          test.sh output is corrected            3.04.02
+ *  - GridClass      CountNextEpoch fixed                   3.04.03
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -119,6 +120,11 @@ TEST_F (TestGridClass, GetInfoAboutGrid)
   EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>))       << "> 02";
   EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<bool>>))  << "> 02";
   EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint32_t>))               << "> 02";
+
+  EXPECT_EQ (permanent.GetGridSize (), 257)     << "> 04";
+  EXPECT_EQ (loop.GetLineSize (), 16)           << "> 04";
+  EXPECT_EQ (motion.GetAliveCellsNumber (), 5)  << "> 04";
+  EXPECT_EQ (motion.GetEpochNum(), 0)           << "> 04";
 }
 
 TEST_F (TestGridClass, AreInfoMethodsConst)
@@ -152,6 +158,7 @@ TEST_F (TestGridClass, CountNextEpoch)
   int permanent_epochstocheck = 4;
   std::vector<std::vector<uint32_t>> permanent_expectedepochs (permanent_epochstocheck, permanent_startepoch);
   fu::testcountnextepoch ("permanent", permanent, permanent_expectedepochs, permanent_epochstocheck);
+  EXPECT_EQ (permanent.GetEpochNum(), 4)  << "> 04";
 
   // check loop grid
   int loop_epochstocheck = 9;
@@ -166,6 +173,7 @@ TEST_F (TestGridClass, CountNextEpoch)
   loop_expectedepochs [7] = { 89,  90,  91, 105, 106, 107, 121, 122, 123, 134, 135, 136, 150, 151, 152, 166, 167, 168 };
   loop_expectedepochs [8] = loop_startepoch;
   fu::testcountnextepoch ("loop", loop, loop_expectedepochs, loop_epochstocheck);
+  EXPECT_EQ (loop.GetEpochNum(), 9)  << "> 04";
 
   // check motion grid
   int motion_epochstocheck = 9;
@@ -180,6 +188,7 @@ TEST_F (TestGridClass, CountNextEpoch)
   motion_expectedepochs[7] = { 75, 91, 93, 107, 108 };
   motion_expectedepochs[8] = { 76, 90, 91, 107, 108 };
   fu::testcountnextepoch ("motion", motion, motion_expectedepochs, motion_epochstocheck);
+  EXPECT_EQ (motion.GetEpochNum(), 9)  << "> 04";
 }
 
 // clang-format on

@@ -98,11 +98,11 @@ then
 
     # if test succeed ( RUN_ALL_TESTS() returned 0 value )
     if [[ $result -ne 0 ]]
-    then echo -e "- gtests \t\t\t\t failed"
+    then echo -e "- gtests failed"
     else  # print final test state
       if [[ $output -eq 0 ]]
       then
-        echo -e "+ gtests (> $logfile) \t\t\t succeed "
+        echo -e "+ gtests (> $logfile) -------------------- succeed"
         echo -e
         tostdout="Global test environment tear-down"
         awk "/.*${tostdout}.*/,/^$/" "$logfile"
