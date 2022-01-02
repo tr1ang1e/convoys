@@ -30,10 +30,12 @@
  *  - PrintClass     ResetTerminal                          3.03.00
  *  - PrintClass     SetChars                               3.04.00
  *  - GridClass      GetLineSize                            3.04.01
- *  - gtest          test.sh output is corrected            3.04.02
+ *  - gtests         test.sh output is corrected            3.04.02
  *  - GridClass      CountNextEpoch fixed                   3.04.03
  *  - PrintClass     PrintEpoch                             3.05.00
  *  - PrintClass     PrintEpochNum                          3.05.01
+ *  - gtests         PrintClass info methods                3.06.00
+ *  - PrintClass     info methods                           3.06.01
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -217,30 +219,50 @@ protected:
 
 TEST_F (TestPrintClass, CTORs)
 {
-  EXPECT_FALSE(me::ISCTOR0<PrintClass>)                         << "> 01";
-  EXPECT_FALSE((me::ISCTOR1<PrintClass, GridClass>))            << "> 01";
-  ASSERT_TRUE((me::ISCTOR1<PrintClass, GridClass* const> ))     << "> 02";
+  EXPECT_FALSE(me::ISCTOR0<PrintClass>)                           << "> 01";
+  EXPECT_FALSE((me::ISCTOR1<PrintClass, GridClass>))              << "> 01";
+  ASSERT_TRUE((me::ISCTOR1<PrintClass, GridClass* const> ))       << "> 02";
   
-  EXPECT_NE(printer.GetGrid(), nullptr);
+  EXPECT_NE(printer.GetGrid(), nullptr)    << "> 04";  
+  EXPECT_EQ(printer.GetAliveChar(), 'x')   << "> 04"; 
+  EXPECT_EQ(printer.GetDeadChar(), 0)      << "> 04"; 
+  EXPECT_EQ(printer.GetDelay(), 43)        << "> 04";
 }
 
 TEST_F (TestPrintClass, GetInfoAboutPrinter)
 {
-  EXPECT_TRUE((me::ISGETGRID0<PrintClass, const GridClass*>))  << "> 02";
+  EXPECT_TRUE((me::ISGETGRID0<PrintClass, const GridClass*>))    << "> 02";
+  EXPECT_TRUE((me::ISGETALIVECHAR0<PrintClass, char>))           << "> 02";
+  EXPECT_TRUE((me::ISGETDEADCHAR0<PrintClass, char>))            << "> 02";
+  EXPECT_TRUE((me::ISGETDELAY0<PrintClass, uint32_t>))           << "> 02";
 }
 
 TEST_F (TestPrintClass, AreInfoMethodsConst)
 {
-  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid)))            << "> 05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid)))              << "> 05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetAliveChar)))         << "> 05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetDeadChar)))          << "> 05";
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetDelay)))             << "> 05";
 }
 
-TEST_F (TestPrintClass, DefaultTerminal)
+TEST_F (TestPrintClass, SetMethods)
 {
-  EXPECT_TRUE ((me::ISSETCHARS2<PrintClass, char, char, void>))              << "> 02";
+  ASSERT_TRUE ((me::ISSETCHARS2<PrintClass, char, char, void>))              << "> 02";
+  ASSERT_TRUE ((me::ISSETFRAMESPERSECOND1<PrintClass, uint32_t, void>))      << "> 02";
+
+  printer.SetChars('o', 'x');
+  EXPECT_EQ (printer.GetAliveChar(), 'o')  << "> 04";
+  EXPECT_EQ (printer.GetDeadChar(), 'x')   << "> 04";
+
+  printer.SetFramesPerSecond(30);
+  EXPECT_EQ (printer.GetDelay(), 34)       << "> 04";
+}
+
+TEST_F (TestPrintClass, DefaultTerminalPrinting)
+{
   EXPECT_TRUE ((me::ISRESETTERMINAL0<PrintClass, void>))                     << "> 02";
   EXPECT_TRUE ((me::ISPRINTEPOCH0<PrintClass, void>))                        << "> 02";
   EXPECT_TRUE ((me::ISPRINTEPOCHNUM0<PrintClass, void>))                     << "> 02";
-  EXPECT_TRUE ((me::ISSETFRAMESPERSECOND1<PrintClass, uint32_t, void>))      << "> 02";
 }
 
 // clang-format on

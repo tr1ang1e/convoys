@@ -11,6 +11,7 @@ class PrintClass
 
   char alive_char;
   char dead_char;
+  uint32_t delay;
 
 public:
   PrintClass () = delete;
@@ -18,7 +19,7 @@ public:
 
   // settings
   void SetChars (char, char);
-  void SetFramesPerSecond (const uint64_t);
+  void SetFramesPerSecond (const uint32_t);
 
   // printing
   void ResetTerminal ();
@@ -27,6 +28,9 @@ public:
 
   // get info methods
   const GridClass* GetGrid () const;
+  char GetAliveChar () const;
+  char GetDeadChar () const;
+  uint32_t GetDelay () const;
 
 private:
 };
