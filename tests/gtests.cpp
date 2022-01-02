@@ -225,7 +225,7 @@ TEST_F (TestPrintClass, CTORs)
   
   EXPECT_NE(printer.GetGrid(), nullptr)    << "> 04";  
   EXPECT_EQ(printer.GetAliveChar(), 'x')   << "> 04"; 
-  EXPECT_EQ(printer.GetDeadChar(), 0)      << "> 04"; 
+  EXPECT_EQ(printer.GetDeadChar(), ' ')    << "> 04"; 
   EXPECT_EQ(printer.GetDelay(), 43)        << "> 04";
 }
 
@@ -271,20 +271,34 @@ int
 main (int argc, char* argv[])
 {
 
-  // testing animation in terminal
-  bool b = false;
-  if (b)
+  // // testing animation in terminal
+  // bool b = false;
+  // if (b)
+  //   {
+  //     std::vector<char> epoch (625, 'x');
+  //     for (int i = 0; i < 625; ++i)
+  //       {
+  //         fu::printepoch (epoch, 25);
+  //         epoch[i] = 0;
+  //         fu::delayprocess (35);
+  //         fu::resetterminal ();
+  //       }
+  //   }
+
+  GridClass grid (16);
+  std::vector<uint32_t> startepoch
+      = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };
+  grid.SetStartEpoch (startepoch);
+
+  PrintClass printer (&grid);
+  printer.SetFramesPerSecond (8);
+
+  for (int i = 0; i < 50; ++i)
     {
-      std::vector<char> epoch (625, 'x');
-      for (int i = 0; i < 625; ++i)
-        {
-          fu::printepoch (epoch, 25);
-          epoch[i] = 0;
-          fu::delayprocess (35);
-          fu::resetterminal ();
-        }
+      printer.PrintEpoch ();
+      grid.CountNextEpoch ();
     }
 
-  ::testing::InitGoogleTest (&argc, argv);
-  return RUN_ALL_TESTS ();
+  // ::testing::InitGoogleTest (&argc, argv);
+  // return RUN_ALL_TESTS ();
 }
