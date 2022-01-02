@@ -16,9 +16,14 @@ public:
   PrintClass () = delete;
   PrintClass (GridClass*);
 
+  // settings
   void SetChars (char, char);
+  void SetFramesPerSecond (const uint64_t);
+
+  // printing
   void ResetTerminal ();
   void PrintEpoch ();
+  void PrintEpochNum ();
 
   // get info methods
   const GridClass* GetGrid () const;

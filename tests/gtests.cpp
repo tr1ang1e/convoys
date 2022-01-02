@@ -32,6 +32,8 @@
  *  - GridClass      GetLineSize                            3.04.01
  *  - gtest          test.sh output is corrected            3.04.02
  *  - GridClass      CountNextEpoch fixed                   3.04.03
+ *  - PrintClass     PrintEpoch                             3.05.00
+ *  - PrintClass     PrintEpochNum                          3.05.01
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -234,9 +236,11 @@ TEST_F (TestPrintClass, AreInfoMethodsConst)
 
 TEST_F (TestPrintClass, DefaultTerminal)
 {
-  EXPECT_TRUE((me::ISSETCHARS2<PrintClass, char, char, void>)) << "> 02";
-  EXPECT_TRUE((me::ISRESETTERMINAL0<PrintClass, void>))        << "> 02";
-  EXPECT_TRUE((me::ISPRINTEPOCH0<PrintClass, void>))           << "> 02"; 
+  EXPECT_TRUE ((me::ISSETCHARS2<PrintClass, char, char, void>))              << "> 02";
+  EXPECT_TRUE ((me::ISRESETTERMINAL0<PrintClass, void>))                     << "> 02";
+  EXPECT_TRUE ((me::ISPRINTEPOCH0<PrintClass, void>))                        << "> 02";
+  EXPECT_TRUE ((me::ISPRINTEPOCHNUM0<PrintClass, void>))                     << "> 02";
+  EXPECT_TRUE ((me::ISSETFRAMESPERSECOND1<PrintClass, uint32_t, void>))      << "> 02";
 }
 
 // clang-format on
