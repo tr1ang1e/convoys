@@ -40,13 +40,13 @@ else
   errormassage "class GridClass"
 fi
 
-# compile Print class
-if g++ $std -c _Print.cpp -o _Print.o
+# compile PrintClass class
+if g++ $std -c _PrintClass.cpp -o _PrintClass.o
 then 
-  echo "+ class Print object file compilation succeed"
+  echo "+ class PrintClass object file compilation succeed"
   let "control++"
 else
-  errormassage "class Print"
+  errormassage "class PrintClass"
 fi
 
 # compile FunctHelper
@@ -59,13 +59,13 @@ else
 fi
 
 # create static project library
-if ar rc lib$libname.a _GridClass.o _Print.o _FunctHelper.o
+if ar rc lib$libname.a _GridClass.o _PrintClass.o _FunctHelper.o
 then
-  echo "+ project static library creation succeed"
+  echo "+ test static library creation succeed"
   mv -f ./lib$libname.a "$libpath"
   let "control++"
 else
-  errormassage "project static library"
+  errormassage "test static library"
 fi
 
 # compile gtests
@@ -116,7 +116,7 @@ fi
 
 # clean directory
 echo -e
-if rm _gtests.o _Print.o _GridClass.o _FunctHelper.o
+if rm _gtests.o _PrintClass.o _GridClass.o _FunctHelper.o
 then echo "+ directory cleaned"
-else echo "- directory not cleaned"
+else echo "- some problems during directory cleaning"
 fi

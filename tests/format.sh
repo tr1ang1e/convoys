@@ -20,18 +20,18 @@ rm FunctHelper.cpp
 
 # PROJECT : format project files
 clang-format _GridClass.cpp > GridClass.cpp
-clang-format _Print.cpp > Print.cpp
+clang-format _PrintClass.cpp > PrintClass.cpp
 clang-format ../src/GridClass.hpp > ../src/_GridClass.hpp
-clang-format ../src/Print.hpp > ../src/_Print.hpp
+clang-format ../src/PrintClass.hpp > ../src/_PrintClass.hpp
 
 # PROJECT : replace current project files with formatted
 cp -f GridClass.cpp _GridClass.cpp
-cp -f Print.cpp _Print.cpp 
+cp -f PrintClass.cpp _PrintClass.cpp 
 cp -f ../src/_GridClass.hpp ../src/GridClass.hpp 
-cp -f ../src/_Print.hpp ../src/Print.hpp 
+cp -f ../src/_PrintClass.hpp ../src/PrintClass.hpp 
 
 # PROJECT : remove temporary project files
 rm GridClass.cpp
-rm Print.cpp
+rm PrintClass.cpp
 rm ../src/_GridClass.hpp
-rm ../src/_Print.hpp
+rm ../src/_PrintClass.hpp

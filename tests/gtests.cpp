@@ -25,6 +25,8 @@
  *  - GridClass      wrong naming fixed                     2.05.03
  *  - project        static library for gtests              2.05.04
  *  - gtests         comparecellspositions fixed            2.05.05
+ *  - gtests         PrinterClass ctors                     3.01.00
+ *  - PrinterClass   ctors                                  3.02.00
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -44,7 +46,7 @@
 #include <vector>
 
 #include "../src/GridClass.hpp"
-#include "../src/Print.hpp"
+#include "../src/PrintClass.hpp"
 
 class TestGridClass : public ::testing::Test
 {
@@ -106,20 +108,20 @@ TEST_F (TestGridClass, CTORs)
   EXPECT_EQ (grid4.GetAliveCellsNumber (), 0)     << "> 03";
 }
 
-TEST_F (TestGridClass, AreInfoMethodsConst)
-{
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize)))                << "> 05";
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber)))        << "> 05";
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch)))            << "> 05";
-  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum)))                << "> 05";
-}
-
 TEST_F (TestGridClass, GetInfoAboutGrid)
 {
   EXPECT_TRUE ((me::ISGETGRIDSIZE0<GridClass, uint32_t>))               << "> 02";
   EXPECT_TRUE ((me::ISGETALIVECELLSNUMBER0<GridClass, uint32_t>))       << "> 02";
   EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<bool>>))  << "> 02";
   EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint32_t>))               << "> 02";
+}
+
+TEST_F (TestGridClass, AreInfoMethodsConst)
+{
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetGridSize)))                << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber)))        << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch)))            << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum)))                << "> 05";
 }
 
 TEST_F (TestGridClass, SetStartEpoch)
@@ -173,6 +175,50 @@ TEST_F (TestGridClass, CountNextEpoch)
   motion_expectedepochs[8] = { 76, 90, 91, 107, 108 };
   fu::testcountnextepoch ("motion", motion, motion_expectedepochs, motion_epochstocheck);
 }
+
+// clang-format on
+
+class TestPrintClass : public ::testing::Test
+{
+
+protected:  
+
+  GridClass grid;
+  PrintClass printer;
+
+  TestPrintClass() 
+  : grid { GridClass (16) }, printer { &grid }
+  {
+  }
+
+  void SetUp() override
+  {
+    std::vector<uint32_t> startepoch = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };
+    grid.SetStartEpoch(startepoch);
+  }
+};
+
+// clang-format off
+
+TEST_F (TestPrintClass, CTORs)
+{
+  EXPECT_FALSE(me::ISCTOR0<PrintClass>)                        << "01";
+  EXPECT_FALSE((me::ISCTOR1<PrintClass, GridClass>))           << "01";
+  ASSERT_TRUE((me::ISCTOR1<PrintClass, GridClass* const> ))    << "02";
+  
+  EXPECT_NE(printer.GetGrid(), nullptr);
+}
+
+TEST_F (TestPrintClass, GetInfoAboutPrinter)
+{
+  EXPECT_TRUE((me::ISGETGRID0<PrintClass, const GridClass*>)) << "02";
+}
+
+TEST_F (TestPrintClass, AreInfoMethodsConst)
+{
+  EXPECT_TRUE((ISMETHODCONST(PrintClass, GetGrid))) << "05";
+}
+
 
 // clang-format on
 
