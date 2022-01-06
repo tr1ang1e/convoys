@@ -36,6 +36,7 @@
  *  - PrintClass     PrintEpochNum                          3.05.01
  *  - gtests         PrintClass info methods                3.06.00
  *  - PrintClass     info methods                           3.06.01
+ *  - PrintClass     SetFramesPerSecond fixed               3.06.02
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -226,7 +227,7 @@ TEST_F (TestPrintClass, CTORs)
   EXPECT_NE(printer.GetGrid(), nullptr)    << "> 04";  
   EXPECT_EQ(printer.GetAliveChar(), 'x')   << "> 04"; 
   EXPECT_EQ(printer.GetDeadChar(), ' ')    << "> 04"; 
-  EXPECT_EQ(printer.GetDelay(), 43)        << "> 04";
+  EXPECT_EQ(printer.GetDelay(), 41)        << "> 04";
 }
 
 TEST_F (TestPrintClass, GetInfoAboutPrinter)
@@ -255,7 +256,10 @@ TEST_F (TestPrintClass, SetMethods)
   EXPECT_EQ (printer.GetDeadChar(), 'x')   << "> 04";
 
   printer.SetFramesPerSecond(30);
-  EXPECT_EQ (printer.GetDelay(), 34)       << "> 04";
+  EXPECT_EQ (printer.GetDelay(), 33)       << "> 04";
+
+  printer.SetFramesPerSecond(0);
+  EXPECT_EQ (printer.GetDelay(), 41)       << "> 04";
 }
 
 TEST_F (TestPrintClass, DefaultTerminalPrinting)
@@ -271,34 +275,20 @@ int
 main (int argc, char* argv[])
 {
 
-  // // testing animation in terminal
-  // bool b = false;
-  // if (b)
+  // GridClass grid (16);
+  // std::vector<uint32_t> startepoch
+  //     = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };
+  // grid.SetStartEpoch (startepoch);
+
+  // PrintClass printer (&grid);
+  // printer.SetFramesPerSecond (8);
+
+  // for (int i = 0; i < 50; ++i)
   //   {
-  //     std::vector<char> epoch (625, 'x');
-  //     for (int i = 0; i < 625; ++i)
-  //       {
-  //         fu::printepoch (epoch, 25);
-  //         epoch[i] = 0;
-  //         fu::delayprocess (35);
-  //         fu::resetterminal ();
-  //       }
+  //     printer.PrintEpoch ();
+  //     grid.CountNextEpoch ();
   //   }
 
-  GridClass grid (16);
-  std::vector<uint32_t> startepoch
-      = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };
-  grid.SetStartEpoch (startepoch);
-
-  PrintClass printer (&grid);
-  printer.SetFramesPerSecond (8);
-
-  for (int i = 0; i < 50; ++i)
-    {
-      printer.PrintEpoch ();
-      grid.CountNextEpoch ();
-    }
-
-  // ::testing::InitGoogleTest (&argc, argv);
-  // return RUN_ALL_TESTS ();
+  ::testing::InitGoogleTest (&argc, argv);
+  return RUN_ALL_TESTS ();
 }
