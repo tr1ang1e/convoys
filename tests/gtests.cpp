@@ -283,7 +283,7 @@ main (int argc, char* argv[])
 
   GridClass grid (16);
   std::vector<uint32_t> startepoch
-       = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };   // loop
+      = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 }; // loop
   //       = { 46, 60, 61, 77, 78, 180, 181, 195, 197, 211, 226, 227};    // motion
   grid.SetStartEpoch (startepoch);
 

@@ -32,7 +32,7 @@ public:
   uint32_t GetEpochNum () const;
 
   using Citer = std::vector<bool>::const_iterator;
-  std::pair<Citer, Citer> GetCurrentEpochCiters() const;
+  std::pair<Citer, Citer> GetCurrentEpochCiters () const;
 
 private:
   void CreateGrid ();
