@@ -31,6 +31,9 @@ public:
   Grid GetCurrentEpoch () const;
   uint32_t GetEpochNum () const;
 
+  using Citer = std::vector<bool>::const_iterator;
+  std::pair<Citer, Citer> GetCurrentEpochCiters() const;
+
 private:
   void CreateGrid ();
   bool CheckNeighbours (uint32_t);

@@ -37,6 +37,8 @@
  *  - gtests         PrintClass info methods                3.06.00
  *  - PrintClass     info methods                           3.06.01
  *  - PrintClass     SetFramesPerSecond fixed               3.06.02
+ *  - GridClass      GetCurrentEpochCiters                  3.06.03
+ *  - PrintClass     PrintEpoch fixed                       3.06.04
  *
  *  Error codes
  *  01 = exists but forbidden
@@ -126,6 +128,9 @@ TEST_F (TestGridClass, GetInfoAboutGrid)
   EXPECT_TRUE ((me::ISGETCURRENTEPOCH0<GridClass, std::vector<bool>>))  << "> 02";
   EXPECT_TRUE ((me::ISGETEPOCHNUM0<GridClass, uint32_t>))               << "> 02";
 
+  EXPECT_TRUE ((me::ISGETCURRENTEPOCHCITERS0<GridClass, std::pair<std::vector<bool>::const_iterator, 
+                                                                  std::vector<bool>::const_iterator>>))  << "> 02";
+
   EXPECT_EQ (permanent.GetGridSize (), 257)     << "> 04";
   EXPECT_EQ (loop.GetLineSize (), 16)           << "> 04";
   EXPECT_EQ (motion.GetAliveCellsNumber (), 5)  << "> 04";
@@ -138,6 +143,7 @@ TEST_F (TestGridClass, AreInfoMethodsConst)
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetLineSize)))                << "> 05";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetAliveCellsNumber)))        << "> 05";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpoch)))            << "> 05";
+  EXPECT_TRUE ((ISMETHODCONST (GridClass, GetCurrentEpochCiters)))      << "> 05";
   EXPECT_TRUE ((ISMETHODCONST (GridClass, GetEpochNum)))                << "> 05";
 }
 
@@ -275,19 +281,20 @@ int
 main (int argc, char* argv[])
 {
 
-  // GridClass grid (16);
-  // std::vector<uint32_t> startepoch
-  //     = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };
-  // grid.SetStartEpoch (startepoch);
+  GridClass grid (16);
+  std::vector<uint32_t> startepoch
+       = { 74, 89, 91, 104, 108, 119, 123, 134, 138, 149, 153, 166, 168, 183 };   // loop
+  //       = { 46, 60, 61, 77, 78, 180, 181, 195, 197, 211, 226, 227};    // motion
+  grid.SetStartEpoch (startepoch);
 
-  // PrintClass printer (&grid);
-  // printer.SetFramesPerSecond (8);
+  PrintClass printer (&grid);
+  printer.SetFramesPerSecond (8);
 
-  // for (int i = 0; i < 50; ++i)
-  //   {
-  //     printer.PrintEpoch ();
-  //     grid.CountNextEpoch ();
-  //   }
+  for (int i = 0; i < 40; ++i)
+    {
+      printer.PrintEpoch ();
+      grid.CountNextEpoch ();
+    }
 
   ::testing::InitGoogleTest (&argc, argv);
   return RUN_ALL_TESTS ();
